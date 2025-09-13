@@ -1,0 +1,15 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  body {
+    background-image: url("../images/imagen.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+ /* ajusta la ruta según tu estructura */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

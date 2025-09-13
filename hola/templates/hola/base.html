@@ -1,0 +1,59 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+    <title>{% block title %}Biblioteca{% endblock %}</title>
+    
+<link rel="stylesheet" href="{% static 'hola/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'hola/css/menus.css' %}">
+
+    
+
+
+</head>
+<body>
+
+    <header class="menu">
+        <div class="logo"></div>  
+      <nav>
+    {% if user.is_authenticated %}
+        <span>Hola, {{ user.username }}</span>
+        <a href="{% url 'principal' %}">Inicio</a>
+
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">
+                Cerrar sesión
+            </button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+    {% endif %}
+</nav>
+
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Biblioteca Virtual</p>
+    </footer>
+
+</body>
+</html>
+<style>
+p{
+ font-size: 25px;
+ color:black;
+ text-align: center;
+
+
+}
+
+</style>

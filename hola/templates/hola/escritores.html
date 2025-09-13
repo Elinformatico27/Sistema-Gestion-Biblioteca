@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>✍️ Top 15 Escritores de América Latina</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background:floralwhite;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin: 40px;
+  }
+
+  .grid-item {
+    text-align: center;
+  }
+
+  .grid-item img {
+    width: 40px;       /* Ancho fijo */
+    height: 80px;      /* Alto fijo */
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 5px 15px ;
+    
+    
+  }
+
+  .grid-item img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px greenyellow
+  }
+
+  .nombre {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+
+  }
+
+  .btn-principal {
+    display: block;
+    margin: 40px auto;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    width: 150px;
+    transition: 0.3s;
+  }
+
+  .btn-principal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+
+  footer {
+    margin-top: auto;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    text-align: center;
+    padding: 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✍️ Top 15 Escritores de América Latina</h1>
+</header>
+
+<div class="grid">
+  <!-- Escritor 1 -->
+  <div class="grid-item">
+    <img src="{% static 'images/peras.jpg' %}" alt="García Márquez" width="140" height="180">
+    <div class="nombre">García Márquez</div>
+  </div>
+
+
+
+  <!-- Escritor 3 -->
+  <div class="grid-item">
+    
+
+    <div class="nombre">Gabriela Mistral</div>
+  </div>
+
+  <!-- Puedes repetir para los 15 escritores -->
+  <!-- Escritor 4 -->
+  <div class="grid-item">
+    <img src="{% static 'jpg' %}" alt="César Vallejo" width="140" height="180">
+    <div class="nombre">César Vallejo</div>
+  </div>
+
+  <!-- ... hasta el 15 ... -->
+</div>
+
+<a href="{% url 'principal' %}" class="btn-principal">🏠 Inicio</a>
+
+<footer>
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

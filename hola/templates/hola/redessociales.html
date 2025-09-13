@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto - Redes Sociales</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <style>
+    body { 
+        font-family:'Poppins',sans-serif; 
+        margin:0; 
+        padding:0; 
+        background:#0f2027; 
+        color:#fff; 
+        display:flex; 
+        flex-direction:column; 
+        min-height:100vh;
+    }
+    header { 
+        text-align:center; 
+        padding:40px 20px; 
+        background: linear-gradient(135deg,#6a11cb,#2575fc); 
+        box-shadow:0 4px 25px rgba(0,0,0,0.4);
+    }
+    header h1 { margin:0; font-size:2.5rem; }
+
+    /* Sección de Contacto con fondo blanco */
+    .contact-section {
+        margin: 20px auto;
+        padding: 20px;  
+        max-width: 700px;
+        background: #ffffff; /* fondo blanco sólido */
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        text-align: center;
+        color:#0f2027; /* texto oscuro */
+    }
+    .contact-section img {
+        width: 100%;
+        max-height: 150px;  
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    .contact-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+    .contact-section p {
+        font-size: 1rem;
+        margin: 6px 0;
+    }
+
+    /* Iconos Redes Sociales más pequeños y coloridos */
+    .contact-icons { 
+        display:flex; 
+        justify-content:center; 
+        gap:20px; 
+        flex-wrap:wrap; 
+        margin-top:15px;
+    }
+    .contact-icons a { 
+        font-size:2.5rem; /* más pequeño */
+        transition:0.3s; 
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .contact-icons a.facebook { color:#1877f2; } /* azul Facebook */
+    .contact-icons a.instagram { color:#e1306c; } /* rosado Instagram */
+    .contact-icons a.whatsapp { color:#25d366; } /* verde WhatsApp */
+    .contact-icons a.twitter { color:#1da1f2; } /* azul Twitter */
+    .contact-icons a.gmail { color:#d44638; } /* rojo Gmail */
+
+    .contact-icons a:hover { transform:scale(1.2); }
+
+    .btn-principal { 
+        display:block; 
+        margin:20px auto 20px auto; 
+        padding:12px 25px; 
+        background:linear-gradient(135deg,#ff416c,#ff4b2b); 
+        color:#fff; 
+        border-radius:30px; 
+        font-weight:700; 
+        text-decoration:none; 
+        text-align:center; 
+        width:160px; 
+        transition:0.3s;
+    }
+    .btn-principal:hover { 
+        transform:translateY(-4px); 
+        box-shadow:0 10px 22px rgba(0,0,0,0.4); 
+    }
+
+    footer { 
+        margin-top:auto; 
+        background:linear-gradient(135deg,#2575fc,#6a11cb); 
+        text-align:center; 
+        padding:20px; 
+        border-top-left-radius:15px; 
+        border-top-right-radius:15px; 
+        font-size:0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📬 Contáctanos</h1>
+</header>
+
+<!-- Sección de Contacto con fondo blanco -->
+<div class="contact-section">
+  <img src="{% static 'img/contacto.jpg' %}" alt="Imagen de contacto">
+  <h2>📍 Información de Contacto</h2>
+  <p><i class="fas fa-map-marker-alt"></i> Dirección: Av. Principal #123, Ciudad, País</p>
+  <p><i class="fas fa-phone"></i> Teléfono: +1 809-555-1234</p>
+  <p><i class="fas fa-envelope"></i> Correo: biblioteca@gmail.com</p>
+  <p><i class="fas fa-clock"></i> Horario: Lunes a Viernes - 8:00am a 6:00pm</p>
+
+  <!-- Iconos de Redes Sociales -->
+  <div class="contact-icons">
+    <a href="https://www.facebook.com/profile.php/?id=100008719270821" class="facebook" target="_blank" title="Facebook">
+    <i class="fab fa-facebook-square"></i>
+</a>
+
+        
+    </a>
+    <a href="https://www.instagram.com/bibliotecado.pedro/?hl=es-la)." class="instagram" target="_blank" title="Instagram">
+        <i class="fab fa-instagram-square"></i>
+    </a>
+    <a href="https://wa.me/1234567890" class="whatsapp" target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp-square"></i>
+    </a>
+    <a href="https://twitter.com/tu_usuario" class="twitter" target="_blank" title="Twitter">
+        <i class="fab fa-twitter-square"></i>
+    </a>
+    <a href="mailto:biblioteca@gmail.com" class="gmail" target="_blank" title="Gmail">
+        <i class="fas fa-envelope-square"></i>
+    </a>
+  </div>
+</div>
+
+<a href="{% url 'contacto' %}" class="btn-principal">🏠 Volver</a>
+
+<footer>
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

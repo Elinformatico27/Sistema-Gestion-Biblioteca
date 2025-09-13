@@ -1,0 +1,44 @@
+{% extends 'hola/base.html' %}
+{% block content %}
+<h1>Lista de Préstamos</h1>
+
+<form method="post" action="{% url 'limpiar_prestamos' %}">
+  {% csrf_token %}
+  <table border="1" cellpadding="10">
+    <tr>
+      <th>Limpiar</th>
+      <th>Usuario</th>
+      <td>{{ prestamo.usuario.user.first_name }} {{ prestamo.usuario.user.last_name }}</td>
+
+      <th>Libro</th>
+      <th>Fecha de préstamo</th>
+      <th>Fecha límite</th>
+      <th>Devuelto</th>
+      <th>Acciones</th>
+    </tr>
+
+    {% for prestamo in prestamos %}
+      <tr>
+        <td><input type="checkbox" name="prestamos_ids" value="{{ prestamo.id }}"></td>
+        <td>{{ prestamo.usuario.user.username }}</td> <!-- 👈 cambio aquí -->
+        <td>{{ prestamo.libro.titulo }}</td>
+        <td>{{ prestamo.fecha_prestamo }}</td>
+        <td>{{ prestamo.fecha_limite }}</td>
+        <td>{{ prestamo.devuelto|yesno:"Sí,No" }}</td>
+        <td>
+          {% if not prestamo.devuelto %}
+            <a href="{% url 'devolver_prestamo' prestamo.id %}" 
+               style="background-color:red; color:white; padding:5px; text-decoration:none;">
+               Devolver
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7">No hay préstamos registrados.</td></tr>
+    {% endfor %}
+  </table>
+
+  <button type="submit">Limpiar seleccionados</button>
+</form>
+{% endblock %}

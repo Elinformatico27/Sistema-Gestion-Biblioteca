@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Galería de Libros</title>
+<style>
+  body { 
+    font-family: 'Poppins', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background: #0f2027; 
+    color: #fff; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh;
+  }
+
+  header { 
+    text-align: center; 
+    padding: 40px 20px; 
+    background: linear-gradient(135deg, #6a11cb, #2575fc); 
+    box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+  }
+
+  header h1 { 
+    margin: 0; 
+    font-size: 2.5rem; 
+  }
+
+  /* Grid 3 filas x 5 columnas */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 280px; /* contenedor más alto para imágenes grandes */
+    gap: 20px;
+    margin: 40px;
+  }
+
+  .libro-box {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: 0.3s;
+    background: #222;
+  }
+
+  .libro-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+  }
+
+  .libro-box div {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 1rem; /* letra más grande */
+    text-align: center;
+    padding: 6px 0;
+  }
+
+  .libro-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+
+  .btn-principal { 
+    display: block; 
+    margin: 20px auto 40px auto; 
+    padding: 12px 25px; 
+    background: linear-gradient(135deg, #ff416c, #ff4b2b); 
+    color: #fff; 
+    border-radius: 30px; 
+    font-weight: 600; 
+    text-decoration: none; 
+    text-align: center; 
+    width: 150px; 
+    transition: 0.3s; 
+  }
+
+  .btn-principal:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+
+  footer { 
+    margin-top: auto; 
+    background: linear-gradient(135deg, #2575fc, #6a11cb); 
+    text-align: center; 
+    padding: 20px; 
+    border-top-left-radius: 15px; 
+    border-top-right-radius: 15px;
+  }
+
+  /* Responsivo para pantallas pequeñas */
+  @media (max-width: 1200px) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 260px;
+    }
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 240px;
+    }
+  }
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 220px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Top 15 Libros</h1>
+</header>
+
+<div class="grid">
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro1.jpg' %}" alt="Libro 1">
+    <div>Libro 1</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro2.jpg' %}" alt="Libro 2">
+    <div>Libro 2</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro3.jpg' %}" alt="Libro 3">
+    <div>Libro 3</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro4.jpg' %}" alt="Libro 4">
+    <div>Libro 4</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro5.jpg' %}" alt="Libro 5">
+    <div>Libro 5</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro6.jpg' %}" alt="Libro 6">
+    <div>Libro 6</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro7.jpg' %}" alt="Libro 7">
+    <div>Libro 7</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro8.jpg' %}" alt="Libro 8">
+    <div>Libro 8</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro9.jpg' %}" alt="Libro 9">
+    <div>Libro 9</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro10.jpg' %}" alt="Libro 10">
+    <div>Libro 10</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro11.jpg' %}" alt="Libro 11">
+    <div>Libro 11</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro12.jpg' %}" alt="Libro 12">
+    <div>Libro 12</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro13.jpg' %}" alt="Libro 13">
+    <div>Libro 13</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'imagenes/libro14.jpg' %}" alt="Libro 14">
+    <div>Libro 14</div>
+  </div>
+  <div class="libro-box">
+    <img src="{% static 'images/imagene8.jpg' %}" alt="Libro 15">
+    <div>imagene8</div>
+  </div>
+</div>
+
+<a href="{% url 'contacto' %}" class="btn-principal">🔙 Volver</a>
+
+<footer>
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

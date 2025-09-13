@@ -1,0 +1,80 @@
+{% extends 'hola/base.html' %}
+{% block content %}
+
+<h1>Lista de Préstamos</h1>
+
+{% if es_admin %}
+<!-- Formulario para crear nuevo préstamo -->
+<h3>Agregar nuevo préstamo</h3>
+<form method="post">
+    {% csrf_token %}
+    <select name="usuario" required>
+        {% for u in usuarios %}
+        <option value="{{ u.id }}">{{ u.nombre|default:u.user.username }} {{ u.apellido }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="libro" required>
+        {% for l in libros %}
+        <option value="{{ l.id }}">{{ l.titulo }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="date" name="fecha_limite" required>
+    <button type="submit">Agregar Préstamo</button>
+</form>
+{% endif %}
+
+<!-- Tabla de préstamos -->
+<form method="post" action="{% url 'eliminar_prestamos' %}">
+    {% csrf_token %}
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                {% if es_admin %}
+                <th>Eliminar</th>
+                {% endif %}
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Límite</th>
+                <th>Estado</th>
+                {% if es_admin %}
+                <th>Acciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                {% if es_admin %}
+                <td><input type="checkbox" name="prestamos_ids" value="{{ prestamo.id }}"></td>
+                {% endif %}
+                <td>{{ prestamo.usuario.nombre|default:prestamo.usuario.user.username }} {{ prestamo.usuario.apellido }}</td>
+                <td>{{ prestamo.libro.titulo }}</td>
+                <td>{{ prestamo.fecha_prestamo }}</td>
+                <td>{{ prestamo.fecha_limite }}</td>
+                <td>{{ prestamo.devuelto|yesno:"Devuelto,Pendiente" }}</td>
+                {% if es_admin %}
+                <td>
+                    {% if not prestamo.devuelto %}
+                    <form method="post" action="{% url 'devolver_prestamo' prestamo.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Devolver Libro</button>
+                    </form>
+                    {% else %}
+                    Devuelto
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if es_admin %}
+    <button type="submit" style="margin-top:10px;">Eliminar préstamos seleccionados</button>
+    {% endif %}
+</form>
+
+{% endblock %}

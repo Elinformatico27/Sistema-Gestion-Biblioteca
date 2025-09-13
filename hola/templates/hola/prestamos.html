@@ -1,0 +1,151 @@
+{% extends 'hola/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background: url("{% static 'images/imagen.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 700px; 
+    margin: 20px auto; 
+    padding: 30px; 
+    background-color: rgba(255,255,255,0.95);
+    border-radius: 12px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  h2, h3 { text-align: center; margin-bottom: 20px; font-weight: 900; color: #333; }
+  label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 1.1rem; }
+  select, input[type="date"], input[type="datetime-local"] {
+    width: 100%; padding: 10px; margin-bottom: 15px; border: 1.5px solid #4CAF50;
+    border-radius: 6px; font-size: 1rem; font-weight: 700; box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  select:focus, input:focus { border-color: #2e7d32; outline: none; }
+
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-group .btn {
+    font-weight: 900;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 10px;
+    color: white;
+    transition: 0.3s;
+  }
+
+  .btn-group .btn-submit { background-color: #4CAF50; }
+  .btn-group .btn-submit:hover { background-color: #388e3c; }
+
+  .btn-group .btn-list { background-color: #0066cc; }
+  .btn-group .btn-list:hover { background-color: #004a99; }
+
+  .btn-group .btn-volver { background-color: #f44336; }
+  .btn-group .btn-volver:hover { background-color: #d32f2f; }
+
+  hr { margin: 30px 0; border: none; border-top: 1px solid #ddd; }
+  ul { list-style-type: none; padding-left: 0; font-size: 1rem; }
+  ul li { padding: 8px 0; border-bottom: 1px solid #eee; }
+  ul li:last-child { border-bottom: none; }
+  .empty-message { color: #777; font-style: italic; }
+
+  /* Mensajes tipo reservas */
+  .message {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .message.success { background-color: #0d6efd; color: white; }
+  .message.error { background-color: #dc3545; color: white; }
+</style>
+
+<div class="container">
+    <h2>Nuevo Préstamo</h2>
+
+    <!-- Mensajes -->
+    <div style="text-align:center;">
+      {% for message in messages %}
+        {% if 'prestamo' in message.tags %}
+          <div class="message {% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% endif %}">
+            {{ message }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+
+{% if form.errors %}
+  <div style="color:red; font-weight:bold;">
+    {{ form.errors }}
+  </div>
+{% endif %}
+
+
+        <!-- Usuario -->
+        <div>
+            <label for="{{ form.usuario.id_for_label }}">Usuario</label>
+            {{ form.usuario }}
+        </div>
+
+        <!-- Libro -->
+        <div>
+            <label for="{{ form.libro.id_for_label }}">Libro</label>
+            {{ form.libro }}
+        </div>
+
+        <!-- Fecha límite -->
+        <div>
+            <label for="{{ form.fecha_limite.id_for_label }}">Fecha límite</label>
+            {{ form.fecha_limite }}
+        </div>
+
+        <!-- Fecha de devolución -->
+        <div>
+            <label for="{{ form.fecha_devolucion.id_for_label }}">Fecha de devolución</label>
+            {{ form.fecha_devolucion }}
+        </div>
+
+        <!-- Botones -->
+        <div class="btn-group">
+          <button type="submit" class="btn btn-submit">Registrar Préstamo</button>
+
+          {% if es_admin %}
+            <a href="{% url 'listaprestamos' %}" class="btn btn-list">Lista de Préstamos</a>
+          {% endif %}
+
+          <a href="{% url 'principal' %}" class="btn btn-volver">Volver</a>
+        </div>
+    </form>
+
+    <hr>
+
+    <h3>Préstamos Actuales</h3>
+    <ul>
+        {% for prestamo in prestamos %}
+            <li>{{ prestamo.usuario }} → {{ prestamo.libro }} | Límite: {{ prestamo.fecha_limite }} | Devuelto: {{ prestamo.fecha_devolucion|default:"No" }}</li>
+        {% empty %}
+            <li class="empty-message">No hay préstamos registrados.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
