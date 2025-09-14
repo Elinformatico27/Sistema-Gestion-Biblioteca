@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -10,7 +11,7 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url("http://tuservidor.com/fondo.jpg") no-repeat center center fixed;
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -18,25 +19,21 @@
             min-height: 100vh;
             padding-top: 40px;
             color: #333;
-            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
         }
         .container {
-           background: rgba(255, 255, 255, 0.9); 
+            background: rgba(255, 255, 255, 0.9);
             width: 95%;
             max-width: 900px;
             padding: 25px;
             border-radius: 15px;
-            
         }
         h1, h2 {
             text-align: center;
             color: #2c3e50;
-    
         }
         form {
             margin-bottom: 25px;
         }
-        /* Formulario horizontal */
         .form-horizontal .form-row {
             display: flex;
             flex-wrap: wrap;
@@ -117,19 +114,9 @@
     <h1>📚 Libros</h1>
 
     {% if es_admin %}
-    <!-- Formulario agregar libro solo para admin/bibliotecario -->
-    
-        
-
-       <form method="POST" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Enviar</button>
-</form>
-
-
-
-        
+    <h2>Agregar Libro</h2>
+    <form method="POST" class="form-horizontal" action="">
+        {% csrf_token %}
         <div class="form-row">
             {% for field in form %}
                 <div class="form-group">
@@ -145,62 +132,5 @@
     </form>
     {% endif %}
 
-    <!-- Formulario búsqueda siempre visible -->
-    <h2>Buscar libros:</h2>
-    <form method="get" class="form-horizontal">
-        <div class="form-row">
-            {% for field in buscar_form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="error">{{ field.errors }}</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-        <button type="submit">Buscar</button>
-    </form>
-
-
-    <!-- Lista de libros -->
-    <h2>Lista de libros</h2>
-
-
-    <ul>
-        {% for libro in libros %}
-            <li>
-                <strong>{{ libro.titulo }}</strong>
-                <br>
-                <small>
-                    {{ libro.autor.nombre }} | 
-                    {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
-                    {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
-                    {{ libro.estado }}
-                </small>
-            </li>
-        {% empty %}
-            <li>No hay libros registrados.</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Volver -->
-    <a href="{% url 'principal' %}" class="back-link">⬅ Volver a Principal</a>
-</div>
-
-<!-- jQuery y Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    if ($('#id_autor').length) {
-        $('#id_autor').select2({ dropdownParent: $('body') });
-    }
-});
-</script>
-
-</body>
-</html>
-
-
+    <h2>Buscar libros</h2>
+    <form method="get" class="form-horizontal" action="">
