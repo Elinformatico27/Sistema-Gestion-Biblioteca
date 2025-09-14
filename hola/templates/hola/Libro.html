@@ -118,8 +118,18 @@
 
     {% if es_admin %}
     <!-- Formulario agregar libro solo para admin/bibliotecario -->
-    <form method="POST" class="form-horizontal">
+    
         {% csrf_token %}
+
+       <form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enviar</button>
+</form>
+
+
+
+        
         <div class="form-row">
             {% for field in form %}
                 <div class="form-group">
@@ -192,3 +202,4 @@ $(document).ready(function() {
 
 </body>
 </html>
+
