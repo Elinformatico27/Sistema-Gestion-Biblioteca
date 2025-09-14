@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'tu_clave_secreta_aqui'
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]  # acepta peticiones externas (Replit)
 
 # ==============================
 # INSTALLED APPS
@@ -83,18 +83,10 @@ DATABASES = {
 # AUTH PASSWORD VALIDATION
 # ==============================
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 # ==============================
@@ -105,40 +97,22 @@ TIME_ZONE = 'America/Santo_Domingo'
 USE_I18N = True
 USE_TZ = True
 
-
-
-# settings.py
-
-# settings.py
-
-# Configuración de correo con Gmail
+# ==============================
+# EMAIL (Gmail)
+# ==============================
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
-# Tu cuenta de Gmail
 EMAIL_HOST_USER = "tu_correo@gmail.com"
 EMAIL_HOST_PASSWORD = "tu_clave_de_aplicacion"
-
-# Dirección que aparecerá en el remitente
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
-
-
-
 # ==============================
-#Archivos estáticos (CSS, JS, imágenes)
+# STATIC & MEDIA
+# ==============================
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]  # opcional si tienes carpeta 'static'
-
-# ==============================
-# Archivos estáticos (CSS, JS, imágenes)
-
-# ==============================
-# MEDIA FILES (opcional)
-# ==============================
+STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -146,17 +120,18 @@ MEDIA_ROOT = BASE_DIR / "media"
 # DEFAULT AUTO FIELD
 # ==============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# URL a la que se redirige después del login exitoso
-LOGIN_REDIRECT_URL = '/principal/'  # Cambia '/principal/' por la página que quieras
 
-# URL de la página de login (si usas @login_required)
-LOGIN_URL = '/login/'  # Cambia '/login/' por la ruta de tu vista de login
+# ==============================
+# LOGIN
+# ==============================
+LOGIN_REDIRECT_URL = '/principal/'
+LOGIN_URL = '/login/'
 
-
+# ==============================
+# CSRF
+# ==============================
 CSRF_TRUSTED_ORIGINS = [
-    "https://3d1f2aa9-206b-43df-a8af-07445fb6e2a4-00-1k8mu6m2dwss4.worf.replit.dev"
+    'https://3d1f2aa9-206b-43df-a8af-07445fb6e2a4-00-1k8mu6m2dwss4.worf.replit.dev'
 ]
-
-
 
 
