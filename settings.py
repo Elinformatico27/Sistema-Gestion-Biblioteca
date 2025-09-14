@@ -131,7 +131,12 @@ LOGIN_URL = '/login/'
 # CSRF
 # ==============================
 # Solo para desarrollo en Replit
-CSRF_TRUSTED_ORIGINS = ["https://*.worf.replit.dev"]
+ALLOWED_HOSTS = ["*"]  # permite cualquier URL de Replit
+CSRF_TRUSTED_ORIGINS = ["https://*.worf.replit.dev"]  # permite cualquier subdominio dinámico
+LOGIN_REDIRECT_URL = '/principal/'
+LOGIN_URL = '/login/'
+
+
 
 
 
