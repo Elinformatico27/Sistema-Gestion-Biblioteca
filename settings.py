@@ -130,8 +130,10 @@ LOGIN_URL = '/login/'
 # ==============================
 # CSRF
 # ==============================
-CSRF_TRUSTED_ORIGINS = [
-    'https://3d1f2aa9-206b-43df-a8af-07445fb6e2a4-00-1k8mu6m2dwss4.worf.replit.dev'
-]
+# Solo para desarrollo en Replit
+CSRF_TRUSTED_ORIGINS = ["https://*.worf.replit.dev"]
+
+
+
 
 
