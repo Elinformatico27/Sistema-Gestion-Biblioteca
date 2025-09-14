@@ -151,3 +151,12 @@ LOGIN_REDIRECT_URL = '/principal/'  # Cambia '/principal/' por la página que qu
 
 # URL de la página de login (si usas @login_required)
 LOGIN_URL = '/login/'  # Cambia '/login/' por la ruta de tu vista de login
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://3d1f2aa9-206b-43df-a8af-07445fb6e2a4-00-1k8mu6m2dwss4.worf.replit.dev"
+]
+
+
+
+
