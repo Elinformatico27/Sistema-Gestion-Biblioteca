@@ -1,0 +1,22 @@
+<header class="menu">
+    <div class="logo"></div>
+    <nav>
+        {% if user.is_authenticated %}
+            <span>Hola, {{ user.username }}</span>
+
+            {% if user.is_superuser %}
+                <!-- Admin puede tener otras opciones -->
+                <a href="{% url 'listaprestamos' %}" class="boton-reserva">Historial Préstamos</a>
+                <a href="{% url 'lista_reservas' %}" class="boton-reserva">Todas Reservas</a>
+            {% else %}
+                <!-- Usuario normal -->
+                <a href="{% url 'perfil_usuario' %}" class="boton-reserva"><i class="fas fa-user"></i> Perfil</a>
+                <a href="{% url 'mis_reservas' %}" class="boton-reserva"><i class="fas fa-book"></i> Mis Reservas</a>
+            {% endif %}
+
+            <a href="{% url 'logout' %}" class="boton-reserva"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="boton-reserva">Iniciar sesión</a>
+        {% endif %}
+    </nav>
+</header>

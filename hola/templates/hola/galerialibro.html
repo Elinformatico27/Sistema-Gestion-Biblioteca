@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Galería de Libros</title>
+<style>
+body { 
+  font-family:'Poppins',sans-serif; 
+  margin:0; padding:0; 
+  background:#0f2027; 
+  color:#fff; 
+  display:flex; flex-direction:column; min-height:100vh;
+}
+
+header { 
+  text-align:center; 
+  padding:40px 20px; 
+  background: linear-gradient(135deg,#6a11cb,#2575fc); 
+  box-shadow:0 4px 25px rgba(0,0,0,0.4);
+}
+
+header h1 { margin:0; font-size:2.5rem; }
+
+.main-content {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin:40px 20px;
+}
+
+.grid { 
+  display:grid; 
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); 
+  gap:20px; 
+  justify-items:center;
+  width:100%;
+  max-width:1000px;
+}
+
+.grid .libro-box {
+  text-align:center;
+  background-color:#1f2937; 
+  padding:10px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.grid .libro-box:hover {
+  transform:scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.grid .libro-box img {
+  width:140px;
+  height:200px;
+  border-radius:12px;
+  object-fit:cover;
+}
+
+.grid .libro-box div {
+  margin-top:8px;
+  font-size:0.9rem;
+  font-weight:500;
+  color:#fff;
+}
+
+.btn-principal { 
+  display:block; 
+  margin:30px auto 0 auto; 
+  padding:12px 25px; 
+  background:linear-gradient(135deg,#ff416c,#ff4b2b); 
+  color:#fff; 
+  border-radius:30px; 
+  font-weight:600; 
+  text-decoration:none; 
+  text-align:center; 
+  width:150px; 
+  transition:0.3s; 
+}
+
+.btn-principal:hover { 
+  transform:translateY(-5px); 
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+footer { 
+  margin-top:auto; 
+  background:linear-gradient(135deg,#2575fc,#6a11cb); 
+  text-align:center; 
+  padding:20px; 
+  border-top-left-radius:15px; 
+  border-top-right-radius:15px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Galería de Libros</h1>
+</header>
+
+<div class="main-content">
+  <div class="grid">
+    <!-- tus libros -->
+    <div class="libro-box">
+      <img src="{% static 'hola/js/CienAñosSoledad.png' %}" alt="Gabriel García Márquez">
+      <div>📖 Cien años de soledad – Gabriel García Márquez</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/DonQuijoteDeLaMancha.png' %}" alt="Miguel de Cervantes">
+      <div>📖 Don Quijote de la Mancha – Miguel de Cervantes</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaCasaDeLosEspiritus.png' %}" alt="Isabel Allende">
+      <div>📖 La casa de los espíritus – Isabel Allende</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaMañosa.png' %}" alt="Juan Bosch">
+      <div>📖 La Mañosa – Juan Bosch</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/ElReinoDelReves.png' %}" alt="María Elena Walsh">
+      <div>📖 El Reino del Revés – María Elena Walsh</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaciudadYLosperros.png' %}" alt="Mario Vargas Llosa">
+      <div>📖 La ciudad y los perros – Mario Vargas Llosa</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/TierraDeAlborada.png' %}" alt="Pedro Mir">
+      <div>📖 Tierra del Alborada – Pedro Mir</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaberintoSoledad.png' %}" alt="Octavio Paz">
+      <div>📖 El laberinto de la soledad – Octavio Paz</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/PoesiaCompleta.png' %}" alt="Pablo Neruda">
+      <div>📖 La poesía completa – Pablo Neruda</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/Elprincipito.png' %}" alt="Antoine de Saint-Exupéry">
+      <div>📖 El principito – Antoine de Saint-Exupéry</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/CuentosDeLaSelva.png' %}" alt="Horacio Quiroga">
+      <div>📖 Cuentos de la selva – Horacio Quiroga</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaInvencionDelMorel.png' %}" alt="Adolfo Bioy Casares">
+      <div>📖 La invención de Morel – Adolfo Bioy Casares</div>
+    </div>
+  </div>
+
+  <!-- Botón principal que lleva a la vista 'principal' -->
+  <a href="{% url 'principal' %}" class="btn-principal">Ir a Principal</a>
+</div>
+
+<footer> 
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

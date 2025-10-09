@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Libro Devuelto</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f2027;  
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .btn-principal {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-principal:hover {
+            background: #ff4757;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Libro devuelto con éxito!</h1>
+        <p>Has devuelto: <strong>{{ libro.titulo }}</strong></p>
+        <a href="{% url 'principal' %}" class="btn-principal">Ir a Página Principal</a>
+    </div>
+</body>
+</html>

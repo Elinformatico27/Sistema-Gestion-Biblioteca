@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial de Reservas</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #34495e; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .card h3 { margin: 0 0 10px; color: #34495e; }
+    .estado { display: inline-block; padding: 5px 10px; border-radius: 20px; font-weight: bold; margin-top: 10px; }
+    .btn-regresar { display: block; margin: 30px auto; padding: 12px 28px; background: #1abc9c; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; text-align: center; }
+    .btn-regresar:hover { background: #159f86; }
+  </style>
+</head>
+<body>
+  <h1>Historial de Reservas</h1>
+
+  <div class="grid">
+    {% for r in reservas %}
+      <div class="card">
+        <h3>{{ r.usuario.username }}</h3>
+        <p><strong>Libro:</strong> {{ r.libro.titulo }}</p>
+        <p><strong>Fecha de Reserva:</strong> {{ r.fecha_reserva }}</p>
+        <p><strong>Fecha de Retiro:</strong> {{ r.fecha_retiro }}</p>
+        <span class="estado">{{ r.estado }}</span>
+      </div>
+    {% empty %}
+      <p>No hay reservas registradas.</p>
+    {% endfor %}
+  </div>
+
+
+  <a href="{% url 'principal' %}" class="btn-regresar">Regresar a la Página Principal</a>
+</body>
+</html>

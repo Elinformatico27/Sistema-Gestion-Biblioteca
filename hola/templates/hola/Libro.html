@@ -1,0 +1,225 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Libros</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <style>
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("http://tuservidor.com/fondo.jpg") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 40px;
+            color: #333;
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+        }
+        .container {
+           background: rgba(255, 255, 255, 0.9); 
+            width: 95%;
+            max-width: 900px;
+            padding: 25px;
+            border-radius: 15px;
+            
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+    
+        }
+        form {
+            margin-bottom: 25px;
+            font-size:20px; /* Aumenta el tamaño base */
+        }
+           option {
+                    font-size: 20px;
+                     padding: 5px;
+           }
+
+        /* Formulario horizontal */
+        .form-horizontal .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .form-horizontal .form-group {
+            flex: 1 1 45%;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-horizontal label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+        button {
+            display: block;
+            margin: 15px auto 0 auto;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #45a049, #3e8e41);
+            transform: scale(1.05);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            border: 1px solid #eee;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        
+  .lista-libros {
+      font-size: 420px;   /* Aumenta tamaño de letra */
+      line-height: 1.6;  /* Espaciado entre líneas para que se vea más claro */
+  }
+
+  .lista-libros li {
+      margin-bottom: 12px; /* Espacio entre libros */
+  }
+
+  .lista-libros strong {
+      font-size: 12px;   /* El título un poco más grande */
+  }
+
+  .lista-libros small {
+      font-size: 130px;   /* Autor, categoría y estado un poco más pequeños */
+      
+  }
+    </style>
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 Libros</h1>
+
+    {% if es_admin %}
+    <!-- Formulario agregar libro solo para admin/bibliotecario -->
+    <form method="POST" class="form-horizontal">
+        {% csrf_token %}
+        <div class="form-row">
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+    {% endif %}
+
+    <!-- Formulario búsqueda siempre visible -->
+    <h2>Buscar libros:</h2>
+    <form method="get" class="form-horizontal">
+        <div class="form-row">
+            {% for field in buscar_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit">Buscar</button>
+    </form>
+
+
+
+   <!-- Lista de libros -->
+<h2 style="font-size:28px;">Lista de libros</h2>
+
+<ul style="font-size:24px; line-height:1.8;">
+    {% for libro in libros %}
+        <li style="margin-bottom:15px;">
+            <strong style="font-size:26px;">{{ libro.titulo }}</strong><br>
+            <span style="font-size:22px;">
+                {{ libro.autor.nombre }} | 
+                {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
+                {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
+                
+                <td>{{ libro.estado_real }}</td>
+
+                    
+                        
+
+            </span>
+        </li>
+    {% empty %}
+        <li>No hay libros registrados.</li>
+    {% endfor %}
+</ul>
+
+
+    <!-- Volver -->
+    <a href="{% url 'principal' %}" class="back-link">⬅ Volver a Principal</a>
+</div>
+
+<!-- jQuery y Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    if ($('#id_autor').length) {
+        $('#id_autor').select2({ dropdownParent: $('body') });
+    }
+});
+</script>
+
+</body>
+</html>

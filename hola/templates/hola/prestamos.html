@@ -1,0 +1,251 @@
+{% block content %}
+{% load static %}
+
+<style>
+/* ================== Mensajes ================== */
+.mensajes {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.mensaje {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Colores según tipo de mensaje */
+.mensaje.success {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.mensaje.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.mensaje.warning {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Botón cerrar */
+.cerrar {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 15px;
+}
+
+/* ================== Contenedor principal ================== */
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+/* ================== Títulos ================== */
+h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 900;
+    font-size: 2rem;
+    color: #333;
+}
+
+/* ================== Formularios ================== */
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+}
+
+select, input[type="date"] {
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 10px;
+    border: 1.5px solid #4CAF50;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+}
+
+select:focus, input[type="date"]:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
+/* ================== Botones ================== */
+button, .btn-link, .btn-admin {
+    font-weight: 900;
+    font-size: 1.2rem;
+    padding: 12px 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px 0;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+button:hover {
+    background-color: #388e3c;
+}
+
+.btn-link {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-link:hover {
+    background-color: #d32f2f;
+}
+
+.btn-admin {
+    background-color: #1976d2;
+    color: white;
+}
+
+.btn-admin:hover {
+    background-color: #115293;
+}
+
+/* ================== Acciones ================== */
+.actions {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* ================== Lista de préstamos ================== */
+hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 1.1rem;
+}
+
+ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+.empty-message {
+    color: #777;
+    font-style: italic;
+}
+</style>
+
+<div class="container">
+    <h2>Nuevo Préstamo</h2>
+
+    <form method="post" novalidate>
+        {% if messages %}
+        <div class="mensajes">
+            {% for message in messages %}
+            <div class="mensaje {% if message.tags %}{{ message.tags }}{% endif %}">
+                <span>{{ message }}</span>
+                <span class="cerrar" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.usuario.id_for_label }}">Usuario</label>
+            {{ form.usuario }}
+        </div>
+        <div>
+            <label for="{{ form.libro.id_for_label }}">Libro</label>
+            {{ form.libro }}
+        </div>
+        <div>
+            <label for="{{ form.fecha_limite.id_for_label }}">Fecha límite</label>
+            {{ form.fecha_limite }}
+        </div>
+        <div>
+            <label for="{{ form.fecha_devolucion.id_for_label }}">Fecha de devolución (opcional)</label>
+            {{ form.fecha_devolucion }}
+        </div>
+
+        <div class="actions">
+            <button type="submit">Guardar Préstamo</button>
+            <a href="{% url 'principal' %}" class="btn-link">Volver</a>
+        </div>
+
+        {% if request.user.is_superuser %}
+        <div class="actions">
+            <a href="{% url 'listaprestamos' %}" class="btn-admin">Lista de préstamos</a>
+            <a href="{% url 'limpiar_prestamos' %}" class="btn-admin"
+               onclick="return confirm('¿Seguro que quieres limpiar todos los préstamos?');">
+               Limpiar préstamos
+            </a>
+        </div>
+        {% endif %}
+    </form>
+
+    <hr>
+
+    <h3>Préstamos Actuales</h3>
+    <ul>
+        {% for prestamo in prestamos %}
+            <li>
+                <span>{{ prestamo.usuario }} → {{ prestamo.libro }} | Límite: {{ prestamo.fecha_limite }} | Devuelto: {{ prestamo.fecha_devolucion|default:"No" }}</span>
+                <span>
+                    <a href="{% url 'devolver_prestamo' prestamo.pk %}" class="btn-admin">Devolver</a>
+                </span>
+            </li>
+        {% empty %}
+            <li class="empty-message">No hay préstamos registrados.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Footer con imagen de fondo -->
+<footer style="position: relative; text-align: center; margin-top: 30px; height: 150px;">
+    <img src="{% static 'images/biblioteca.jpg' %}" 
+         alt="Biblioteca" 
+         style="width:100%; height:100%; object-fit: cover; opacity: 0.3; position: absolute; top:0; left:0;">
+    <div style="position: absolute; top:50%; left:50%; transform: translate(-50%, -50%);
+                font-size: 40px; font-weight: bold; color:blue; text-shadow: 1px 1px 2px #fff;">
+        Biblioteca Virtual 2025
+    </div>
+</footer>
+
+{% endblock %}

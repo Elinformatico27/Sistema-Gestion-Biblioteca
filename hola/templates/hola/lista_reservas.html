@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial de Reservas</title>
+  <style>
+    /* Estilos generales */
+    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #34495e; }
+
+    /* Grid de tarjetas */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+    .card h3 { margin: 0 0 10px; color: #34495e; }
+
+    /* Estados */
+    .estado { display: inline-block; padding: 5px 10px; border-radius: 20px; font-weight: bold; margin-top: 10px; }
+    .estado.Pendiente { background: #f39c12; color: white; }
+    .estado.Activo { background: #27ae60; color: white; }
+    .estado.Finalizado { background: #95a5a6; color: white; }
+
+    /* Botón regresar */
+    .btn-regresar { display: block; margin: 30px auto; padding: 12px 28px; background: #1abc9c; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; text-align: center; }
+    .btn-regresar:hover { background: #159f86; }
+
+    /* Botones de acción unificados */
+    .acciones form {
+      display: inline-block;
+      margin: 5px 5px 0 0; /* espacio entre botones */
+    }
+
+    .acciones button {
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      min-width: 130px; /* mismo tamaño para todos */
+      transition: background 0.3s, transform 0.2s;
+      color: white;
+    }
+
+    /* Botón verde: Marcar Finalizado */
+    .btn-finalizado { background-color: #2ecc71; }
+    .btn-finalizado:hover { background-color: #27ae60; transform: translateY(-2px); }
+
+    /* Botón azul: Limpiar */
+    .btn-limpiar { background-color: #3498db; }
+    .btn-limpiar:hover { background-color: #2980b9; transform: translateY(-2px); }
+
+  </style>
+</head>
+<body>
+  <h1>Historial de Reservas</h1>
+
+  <div class="grid">
+    {% for r in reservas %}
+      <div class="card">
+        <h3>{{ r.usuario.username }}</h3>
+        <p><strong>Libro:</strong> {{ r.libro.titulo }}</p>
+        <p><strong>Fecha de Reserva:</strong> {{ r.fecha_inicio|date:"d/m/Y" }}</p>
+        <p><strong>Fecha de Retiro:</strong> {{ r.fecha_fin|date:"d/m/Y" }}</p>
+        <span class="estado {{ r.estado|capfirst }}">{{ r.get_estado_display }}</span>
+
+        {% if r.estado != 'finalizado' %}
+          <div class="acciones">
+            <!-- Marcar como finalizado -->
+            <form method="post" action="{% url 'marcar_reserva_finalizado' r.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn-finalizado">Marcar Finalizado</button>
+            </form>
+
+            <!-- Limpiar reserva -->
+            <form method="POST" action="{% url 'limpiar_reserva' r.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn-limpiar">Limpiar</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p>No hay reservas registradas.</p>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'principal' %}" class="btn-regresar">Regresar a la Página Principal</a>
+</body>
+</html>

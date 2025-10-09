@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Prueba de imagen</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 24px; }
+    .card { max-width: 700px; margin: 0 auto; text-align: center; }
+    img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Imagen de prueba</h1>
+    <!-- Cambia la ruta según donde pongas la imagen en static/ -->
+    {% load static %}
+
+
+    <p>Ruta: <code>static/myapp/images/descarga.jpg</code></p>
+  </div>
+</body>
+</html>

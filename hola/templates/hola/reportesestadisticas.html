@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Estadísticas</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px 15px;
+      background: #6a11cb;
+      color: #fff;
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    header .btn-principal {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 15px;
+      background: #ff7e5f;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    header .btn-principal:hover {
+      transform: translateY(-2px);
+    }
+
+    .estadisticas-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 25px 10px;
+    }
+
+    .estadistica {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      flex: 1 1 180px;
+      max-width: 220px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      font-size: 0.9rem;
+    }
+
+    .estadistica h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #6a11cb;
+    }
+
+    .estadistica ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .estadistica li {
+      margin: 4px 0;
+    }
+
+    .grafico-container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      max-width: 500px;
+      margin: 0 auto 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .grafico-container h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #6a11cb;
+      text-align: center;
+    }
+
+    footer {
+      background: #6a11cb;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    @media(max-width: 500px){
+      .estadisticas-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .grafico-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📊 Reporte de Estadísticas</h1>
+    <a href="{% url 'principal' %}" class="btn-principal">🏠 Inicio</a>
+  </header>
+
+  <div class="estadisticas-container">
+    <!-- Top 5 prestados -->
+    <div class="estadistica">
+      <h3>📚 Top 5 Prestados</h3>
+      <ul>
+        {% for item in top_prestados %}
+          <li>{{ item.libro__titulo }} - {{ item.total }}</li>
+        {% empty %}
+          <li>No hay datos</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Top 5 reservados -->
+    <div class="estadistica">
+      <h3>📖 Top 5 Reservados</h3>
+      <ul>
+        {% for item in top_reservados %}
+          <li>{{ item.libro__titulo }} - {{ item.total }}</li>
+        {% empty %}
+          <li>No hay datos</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Total préstamos -->
+    <div class="estadistica">
+      <h3>📈 Total Préstamos</h3>
+      <p>{{ total_prestamos }}</p>
+    </div>
+
+    <!-- Usuarios activos -->
+    <div class="estadistica">
+      <h3>👤 Usuarios Activos</h3>
+      <p>{{ usuarios_activos }}</p>
+    </div>
+  </div>
+
+  <!-- Gráfico de préstamos por día -->
+  <div class="grafico-container">
+    <h3>📊 Préstamos por Día</h3>
+    <canvas id="prestamosChart"></canvas>
+  </div>
+
+  <footer>
+    &copy; 2025 Biblioteca Digital. Todos los derechos reservados. | <a href="#">Política de Privacidad</a>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('prestamosChart').getContext('2d');
+    const prestamosData = {
+      labels: [
+        {% for item in prestamos_por_dia %}
+          "{{ item.dia }}",
+        {% endfor %}
+      ],
+      datasets: [{
+        label: 'Préstamos',
+        data: [
+          {% for item in prestamos_por_dia %}
+            {{ item.total }},
+          {% endfor %}
+        ],
+        backgroundColor: 'rgba(106,17,203,0.5)',
+        borderColor: 'rgba(106,17,203,1)',
+        borderWidth: 1
+      }]
+    };
+
+    const prestamosChart = new Chart(ctx, {
+      type: 'bar',
+      data: prestamosData,
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

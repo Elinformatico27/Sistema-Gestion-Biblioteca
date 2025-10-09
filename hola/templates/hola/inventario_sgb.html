@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario de Libros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background: #1abc9c;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        .btn-devolver {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background: #e67e22;
+            cursor: pointer;
+        }
+        .btn-devolver:hover {
+            background: #d35400;
+        }
+        .estado {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        .Disponible { background: #27ae60; }
+        .Agotado { background: #f39c12; }
+    </style>
+</head>
+<body>
+    <h1>Inventario de Libros</h1>
+
+    {% if inventario %}
+    <table>
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Total Ejemplares</th>
+                <th>Disponibles</th>
+                <th>Prestados/Reservados</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventario %}
+            <tr>
+                <td>{{ item.libro.titulo }}</td>
+                <td>{{ item.total }}</td>
+                <td>
+                    {% if item.disponible > 0 %}
+                        <span class="estado Disponible">{{ item.disponible }}</span>
+                    {% else %}
+                        <span class="estado Agotado">0</span>
+                    {% endif %}
+                </td>
+                <td>{{ item.prestados }}</td>
+                <td>
+                    {% if item.total > item.prestados %}
+                        <a href="{% url 'devolver_libro' item.libro.id %}" class="btn-devolver">Devolver Libro</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay libros en el inventario.</p>
+    {% endif %}
+</body>
+</html>

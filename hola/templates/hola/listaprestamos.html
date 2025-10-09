@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Préstamos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background: #1abc9c;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        .btn-regresar, .btn-devolver {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .btn-regresar {
+            background: #3498db;
+        }
+        .btn-regresar:hover {
+            background: #2980b9;
+        }
+        .btn-devolver {
+            background: #e67e22;
+        }
+        .btn-devolver:hover {
+            background: #d35400;
+        }
+        .estado {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        .Pendiente { background: #f39c12; }
+        .Activo { background: #27ae60; }
+        .Devuelto { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    <h1>Lista de Préstamos</h1>
+
+    {% if prestamos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Fecha de Préstamo</th>
+                <th>Fecha de Devolución</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.usuario.nombre }}</td>
+                <td>{{ prestamo.libro.titulo }}</td>
+                <td>{{ prestamo.fecha_prestamo }}</td>
+                <td>{{ prestamo.fecha_devolucion|default:"-" }}</td>
+                <td>
+                    {% if prestamo.devuelto %}
+                        <span class="estado Devuelto">Devuelto</span>
+                    {% else %}
+                        <span class="estado Activo">Activo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not prestamo.devuelto %}
+                        <a href="{% url 'devolver_prestamo' prestamo.pk %}" class="btn-devolver">Devolver</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay préstamos registrados.</p>
+    {% endif %}
+
+    <a href="{% url 'principal' %}" class="btn-regresar">Regresar a la Página Principal</a>
+</body>
+</html>

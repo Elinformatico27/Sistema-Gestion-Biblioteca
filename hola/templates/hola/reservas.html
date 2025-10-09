@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reserva de Libros</title>
+<style>
+/* Botones */
+.btn-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.btn, .btn-lista, .btn-limpiar {
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  display: inline-block;
+}
+
+/* Botón principal */
+.btn { background-color: #0066cc; color: #fff; }
+.btn:hover { background-color: #004a99; }
+
+/* Lista de reservas */
+.btn-lista { background-color: #28a745; color: #fff; }
+.btn-lista:hover { background-color: #1e7e34; }
+
+/* Limpiar reservas */
+.btn-limpiar { background-color: #dc3545; color: #fff; }
+.btn-limpiar:hover { background-color: #a71d2a; }
+
+/* Mensajes */
+.mensajes { margin-bottom: 20px; width: 100%; }
+.mensaje { padding: 12px 20px; border-radius: 8px; margin-bottom: 10px; font-family: Arial, sans-serif; font-weight: bold; width: 100%; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
+.mensaje.success { background-color: #cce5ff; color: #004085; }
+.mensaje.error { background-color: #f8d7da; color: #721c24; }
+.mensaje.warning { background-color: #fff3cd; color: #856404; }
+
+/* Fondo */
+body {
+  margin: 0; padding: 0; font-family: 'Arial', sans-serif;
+  background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+  min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative;
+}
+body::before {
+  content: ""; position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 0;
+}
+
+.reserva-container {
+  position: relative; z-index: 1;
+  background-color: rgba(255,255,255,0.95); padding: 30px 50px; border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7); width: 700px;
+}
+
+h2 { text-align: center; color: #222; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+.form-group { margin-bottom: 20px; }
+label { font-weight: bold; display: block; margin-bottom: 8px; }
+select, input[type="date"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; outline: none; font-size: 16px; }
+select:focus, input:focus { border-color: #0066cc; box-shadow: 0 0 10px rgba(0,102,204,0.5); }
+
+select.lector { font-weight: bold; color: #000; background-color: #eaeaea; }
+
+@media (max-width: 750px) {
+  .reserva-container { width: 90%; padding: 20px; }
+  .btn-group { flex-direction: column; }
+  .btn, .btn-lista, .btn-limpiar { width: 100%; margin-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="reserva-container">
+  <h2>Reservar Libro</h2>
+
+  {% if messages %}
+    <div class="mensajes">
+      {% for message in messages %}
+        <div class="mensaje {% if message.tags %}{{ message.tags }}{% endif %}">
+          <span>{{ message }}</span>
+          <span class="cerrar" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <!-- Usuario -->
+    <div class="form-group">
+      <label for="usuario">Usuario</label>
+      <select name="usuario" id="usuario"
+              class="{% if not es_admin %}lector{% endif %}"
+              required
+              {% if not es_admin %}disabled{% endif %}>
+        {% if es_admin %}
+          {% for user in usuarios %}
+            <option value="{{ user.id }}"
+              {% if user.id == request.user.usuario.id %}selected{% endif %}>
+              {{ user.nombre }} {{ user.apellido }}
+            </option>
+          {% endfor %}
+        {% else %}
+          <option value="{{ request.user.usuario.id }}" selected>
+            {{ request.user.usuario.nombre }} {{ request.user.usuario.apellido }}
+          </option>
+        {% endif %}
+      </select>
+    </div>
+
+    <!-- Libro -->
+    <div class="form-group">
+      <label for="libro">Libro</label>
+      <select name="libro" id="libro" required>
+        <option value="">Seleccione un libro</option>
+        {% for libro in libros %}
+          <option value="{{ libro.id }}">{{ libro.titulo }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Fechas -->
+    <div class="form-group">
+      <label for="fecha_inicio">Fecha de inicio</label>
+      <input type="date" name="fecha_inicio" id="fecha_inicio" required>
+    </div>
+
+    <div class="form-group">
+      <label for="fecha_fin">Fecha de fin</label>
+      <input type="date" name="fecha_fin" id="fecha_fin" required>
+    </div>
+
+    <!-- Botones principales -->
+    <div class="btn-group">
+      <button type="submit" name="accion" value="reservar" class="btn">Reservar</button>
+      <a href="{% url 'principal' %}" class="btn">Volver</a>
+
+      <!-- Admin/Bibliotecario -->
+      {% if es_admin %}
+        <a href="{% url 'lista_reservas' %}" class="btn-lista">Ver lista de reservas</a>
+
+        <form method="post" action="{% url 'limpiar_todas_reservas' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn-limpiar"
+                  onclick="return confirm('¿Está seguro que desea limpiar todas las reservas?');">
+            Limpiar Todas
+          </button>
+        </form>
+
+        <form method="post" action="{% url 'limpiar_reservas_finalizadas' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn-limpiar"
+                  onclick="return confirm('¿Está seguro que desea eliminar solo las reservas finalizadas?');">
+            Limpiar Finalizadas
+          </button>
+        </form>
+      {% endif %}
+
+      <!-- Lector normal -->
+      {% if user.is_authenticated and not es_admin %}
+        <a href="{% url 'mis_reservas' %}" class="btn-lista">Mis Reservas</a>
+        <a href="{% url 'perfil_usuario' %}" class="btn">Perfil</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<script>
+// Cierre automático de mensajes
+setTimeout(() => {
+  document.querySelectorAll('.mensaje').forEach(msg => msg.style.display='none');
+}, 5000);
+</script>
+</body>
+</html>

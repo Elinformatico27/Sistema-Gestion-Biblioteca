@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Galería de Libros</title>
+<style>
+body { 
+  font-family:'Poppins',sans-serif; 
+  margin:0; padding:0; 
+  background:#0f2027; 
+  color:#fff; 
+  display:flex; 
+  flex-direction:column; 
+  min-height:100vh;
+}
+
+header { 
+  text-align:center; 
+  padding:40px 20px; 
+  background: linear-gradient(135deg,#6a11cb,#2575fc); 
+  box-shadow:0 4px 25px rgba(0,0,0,0.4);
+}
+
+header h1 { margin:0; font-size:2.5rem; }
+
+.grid { 
+  display:grid; 
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); 
+  gap:20px; 
+  justify-items:center; 
+  margin:40px;
+}
+
+.grid .libro-box {
+  text-align:center;
+}
+
+.grid .libro-box img {
+  width:140px;
+  height:200px;
+  border-radius:12px;
+  object-fit:cover;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.grid .libro-box img:hover {
+  transform:scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.grid .libro-box div {
+  margin-top:8px;
+  font-size:0.9rem;
+  font-weight:500;
+}
+
+.btn-principal { 
+  display:block; 
+  margin:20px auto 40px auto; 
+  padding:12px 25px; 
+  background:linear-gradient(135deg,#ff416c,#ff4b2b); 
+  color:#fff; 
+  border-radius:30px; 
+  font-weight:600; 
+  text-decoration:none; 
+  text-align:center; 
+  width:150px; 
+  transition:0.3s; 
+}
+
+.btn-principal:hover { 
+  transform:translateY(-5px); 
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+footer { 
+  margin-top:auto; 
+  background:linear-gradient(135deg,#2575fc,#6a11cb); 
+  text-align:center; 
+  padding:20px; 
+  border-top-left-radius:15px; 
+  border-top-right-radius:15px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Galeria de Escritores</h1>
+</header>
+
+<div class="grid">
+  <div class="libro-box">
+     <img src="{% static 'hola/js/gabrielgarciamarquez.jpg' %}" alt="Gabriel García Márquez">
+    <div>📖 Gabriel García Márquez</div>
+  </div>
+
+  <div class="libro-box">
+     <img src="{% static 'hola/js/IsabelAllende.png' %}" alt="Isabel Allende">
+    <div>📖 Isabel Allende</div>
+  </div>
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/MiguelCervante.png' %}" alt="Miguel de Cervantes">
+    <div>📖 Miguel de Cervantes</div>
+  </div>
+
+  <div class="libro-box">
+    <img src="{% static 'hola/MariaElenWalsh.png' %}" alt="Maria Elena Walsh">
+    <div>📖 Maria Elena Walsh</div>                                                  
+  </div>
+ 
+  <div class="libro-box">
+    <img src="{% static 'hola/js/JuanBosh.png' %}" alt="Juan Bosh">
+    <div>📖 Juan Bosh</div> 
+  </div>
+
+  <div class="libro-box">    
+    <img src="{% static 'hola/js/MarioVargaLLosa.png' %}" alt="Mario Vargas Llosa">
+    <div>📖 Mario Vargas Llosa</div> 
+  </div>
+
+  <div class="libro-box"> 
+    <img src="{% static 'hola/PedroMir.png' %}" alt="Pedro Mir">
+    <div>📖 Pedro Mir</div>
+  </div>
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/OctavioPaz.png' %}" alt="Octavio Paz">
+    <div>📖 Octavio Paz</div> 
+  </div>                                                                
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/PabloNeruda.png' %}" alt="Pablo Neruda">
+    <div>📖 Pablo Neruda</div> 
+  </div>                                                                      
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/AntonioDeSaint.png' %}" alt="Antonio De Saint">
+    <div>📖 Antonio De Saint</div> 
+  </div>                                                                       
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/HoracioQuiroga.png' %}" alt="Horacio Quiroga">
+    <div>📖 Horacio Quiroga</div> 
+  </div>                                                                   
+
+  <div class="libro-box">
+    <img src="{% static 'hola/js/AdolfoBIOYCas.png' %}" alt="Adolfo Bioy Casares">
+    <div>📖 Adolfo Bioy Casares</div> 
+  </div>                                                                     
+</div>
+
+<a href="{% url 'contacto' %}" class="btn-principal">🔙 Volver</a>
+
+<footer>
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

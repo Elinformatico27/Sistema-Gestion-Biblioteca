@@ -1,0 +1,47 @@
+
+
+{% block content %}
+<h2 style="text-align:center; margin-bottom:20px;">Formulario de Reserva</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <p style="color: green; font-weight: bold; text-align:center;">{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<form method="POST" action="{% url 'reservas' %}" style="max-width:500px; margin:0 auto 40px auto; background:#f9f9f9; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit" style="display:block; margin:20px auto; padding:12px 28px; background:#007bff; color:white; text-align:center; border:none; border-radius:8px; font-weight:bold;">
+    Crear Reserva
+  </button>
+</form>
+
+<h2 style="text-align:center; margin-bottom:20px;">Mis Reservas</h2>
+
+{% if reservas %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+    {% for reserva in reservas %}
+      <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <h3>{{ reserva.libro.titulo }}</h3>
+        <p><strong>Fecha de Inicio:</strong> {{ reserva.fecha_inicio }}</p>
+        <p><strong>Fecha de Fin:</strong> {{ reserva.fecha_fin }}</p>
+        <p><strong>Estado:</strong> {{ reserva.get_estado_display }}</p>
+        {% if reserva.estado == "activo" %}
+          <p style="color: green; font-weight: bold;">¡Tu reserva está disponible para recoger!</p>
+        {% elif reserva.estado == "pendiente" %}
+          <p style="color: orange; font-weight: bold;">Pendiente: aún no puedes recoger el libro</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p style="text-align:center;">No tienes reservas activas.</p>
+{% endif %}
+
+<a href="{% url 'principal' %}" style="display:block; margin:30px auto; padding:12px 28px; background:#007bff; color:white; text-align:center; text-decoration:none; border-radius:8px; font-weight:bold; width:200px;">
+  Volver al Inicio
+</a>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Página de Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido a la Biblioteca</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hola, {{ user.username }}. Ya estás logueado.</p>
+        <a href="{% url 'principal' %}">Ir a la página principal</a> |
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+    {% else %}
+        <p>Por favor, <a href="{% url 'login' %}">inicia sesión</a> para acceder al sistema.</p>
+    {% endif %}
+</body>
+</html>

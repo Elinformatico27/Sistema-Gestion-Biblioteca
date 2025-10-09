@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galerías y Contacto</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
+        integrity="sha512-MZb8z+y0DStvX6G6N4zG3f5P/2GcF6aSkhU6XK+f+JQK2lZ8R/9b3nM0HRk6sm8gYXsx1X6wA1v7Xo3+pjxKmg==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body { font-family:'Poppins',sans-serif; margin:0; padding:0; background:#0f2027; color:#fff; display:flex; flex-direction:column; min-height:100vh;}
+    header { text-align:center; padding:60px 20px; background: linear-gradient(135deg,#6a11cb,#2575fc); box-shadow:0 4px 25px rgba(0,0,0,0.4);}
+    header h1 { font-size:3rem; margin:0;}
+    header p { font-size:1.2rem; margin-top:10px;}
+    .menu-container { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; padding:40px 20px;}
+    .card { width:220px; height:220px; border-radius:25px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-weight:600; font-size:1.1rem; cursor:pointer; transition:0.3s; }
+    .card i { font-size:4rem; margin-bottom:15px; }
+    .card:hover { transform:translateY(-10px) scale(1.05); }
+    .contacto { background:linear-gradient(135deg,#1fd1f9,#b621fe);}
+    .libros { background:linear-gradient(135deg,#f7971e,#ffd200);}
+    .escritores { background:linear-gradient(135deg,#7f00ff,#e100ff);}
+    .btn-principal { display:block; margin:40px auto 0 auto; padding:12px 25px; background:linear-gradient(135deg,#ff416c,#ff4b2b); color:#fff; border-radius:30px; font-weight:600; text-decoration:none; text-align:center; width:150px; }
+    .btn-principal:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+    footer { margin-top:auto; background:linear-gradient(135deg,#2575fc,#6a11cb); text-align:center; padding:20px; border-top-left-radius:15px; border-top-right-radius:15px;}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Galerías y Contacto</h1>
+  <p>Explora nuestra biblioteca y conoce a los escritores de América Latina</p>
+  <a href="{% url 'principal' %}" class="btn-principal">🏠 Inicio</a>
+</header>
+
+<div class="menu-container">
+  <a href="{% url 'redessociales' %}" class="card contacto">
+    <i class="fab fa-facebook-square"></i>
+    <i class="fab fa-whatsapp-square"></i>
+    <i class="fab fa-instagram-square"></i>
+    <p>Contacto</p>
+  </a>
+
+  <a href="{% url 'galerialibro' %}" class="card libros">
+    <i class="fas fa-book-open"></i>
+    <p>Galería de Libros</p>
+  </a>
+
+  <a href="{% url 'escritores' %}" class="card escritores">
+    <i class="fas fa-user-edit"></i>
+    <p>Escritores</p>
+  </a>
+</div>
+<footer>
+  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

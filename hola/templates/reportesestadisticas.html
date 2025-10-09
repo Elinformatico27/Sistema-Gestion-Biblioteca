@@ -1,0 +1,18 @@
+<h2>Reporte de Estadísticas de la Biblioteca</h2>
+
+<h3>Top 5 Libros más Prestados</h3>
+<ul>
+  {% for libro in top_prestados %}
+    <li>{{ libro.libro__titulo }} - {{ libro.total }} préstamos</li>
+  {% endfor %}
+</ul>
+
+<h3>Top 5 Libros más Reservados</h3>
+<ul>
+  {% for libro in top_reservados %}
+    <li>{{ libro.libro__titulo }} - {{ libro.total }} reservas</li>
+  {% endfor %}
+</ul>
+
+<p>Total de préstamos: {{ total_prestamos }}</p>
+<p>Usuarios activos: {{ usuarios_activos }}</p>

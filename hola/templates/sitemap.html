@@ -1,0 +1,40 @@
+
+{% block content %}
+<div class="container" style="padding:20px;">
+  <h2>Mapa del Sitio - Sistema de Gestión de Biblioteca</h2>
+  <p>Haz clic en cualquier enlace para ir directamente.</p>
+  <hr>
+
+  <ul>
+    <li><a href="{% url 'home' %}">Inicio</a></li>
+    <li><a href="{% url 'login' %}">Login</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    <li><a href="{% url 'registro' %}">Registro de Usuario</a></li>
+
+    <li><a href="{% url 'libros' %}">Lista de Libros</a></li>
+    <li><a href="{% url 'galerialibro' %}">Galería de Libros</a></li>
+
+    <li><a href="{% url 'prestamos' %}">Préstamos</a></li>
+    <li><a href="{% url 'listaprestamos' %}">Lista de Préstamos</a></li>
+    <li><a href="{% url 'prestamo_mensaje' %}">Mensajes de Préstamos</a></li>
+
+    <li><a href="{% url 'reservas' %}">Reservar Libro</a></li>
+    <li><a href="{% url 'mis_reservas' %}">Mis Reservas</a></li>
+    <li><a href="{% url 'lista_reservas' %}">Lista de Reservas</a></li>
+
+    <li><a href="{% url 'perfil_usuario' %}">Perfil de Usuario</a></li>
+    <li><a href="{% url 'usuario_formulario' %}">Formulario de Usuario</a></li>
+
+    <li><a href="{% url 'estadisticas' %}">Estadísticas</a></li>
+    <li><a href="{% url 'generar_multas' %}">Generar Multas</a></li>
+    <li><a href="{% url 'escritores' %}">Escritores</a></li>
+    <li><a href="{% url 'redessociales' %}">Redes Sociales</a></li>
+    <li><a href="{% url 'acerca' %}">Acerca de Nosotros</a></li>
+    <li><a href="{% url 'contacto' %}">Contacto</a></li>
+
+    <li><a href="{% url 'principal' %}">Principal</a></li>
+    <li><a href="{% url 'bibliotecario' %}">Vista Bibliotecario</a></li>
+    <li><a href="{% url 'inventario_sgb' %}">Inventario</a></li>
+  </ul>
+</div>
+{% endblock %}
