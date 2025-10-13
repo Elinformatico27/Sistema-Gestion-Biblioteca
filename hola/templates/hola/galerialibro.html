@@ -40,16 +40,6 @@ header h1 { margin:0; font-size:2.5rem; }
 
 .grid .libro-box {
   text-align:center;
-  background-color:#1f2937; 
-  padding:10px;
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-  transition:0.3s;
-}
-
-.grid .libro-box:hover {
-  transform:scale(1.05);
-  box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
 .grid .libro-box img {
@@ -57,13 +47,19 @@ header h1 { margin:0; font-size:2.5rem; }
   height:200px;
   border-radius:12px;
   object-fit:cover;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.grid .libro-box img:hover {
+  transform:scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
 .grid .libro-box div {
   margin-top:8px;
   font-size:0.9rem;
   font-weight:500;
-  color:#fff;
 }
 
 .btn-principal { 
@@ -85,6 +81,15 @@ header h1 { margin:0; font-size:2.5rem; }
   box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
+.portada-principal {
+  margin-top:40px;
+  width:300px;
+  height:420px;
+  border-radius:12px;
+  object-fit:cover;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
 footer { 
   margin-top:auto; 
   background:linear-gradient(135deg,#2575fc,#6a11cb); 
@@ -98,75 +103,38 @@ footer {
 <body>
 
 <header>
-  <h1>📚 Galería de Libros</h1>
+  <h1>📚 Top Libros</h1>
 </header>
 
 <div class="main-content">
+
   <div class="grid">
-    <!-- tus libros -->
     <div class="libro-box">
-      <img src="{% static 'hola/js/CienAñosSoledad.png' %}" alt="Gabriel García Márquez">
-      <div>📖 Cien años de soledad – Gabriel García Márquez</div>
+      <img src="https:/Isabel_Allende.jpg" alt="Isabel Allende">
+      <div>📖 Isabel Allende</div>
     </div>
-
     <div class="libro-box">
-      <img src="{% static 'hola/js/DonQuijoteDeLaMancha.png' %}" alt="Miguel de Cervantes">
-      <div>📖 Don Quijote de la Mancha – Miguel de Cervantes</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Miguel_de_Cervantes.jpg" alt="Miguel de Cervantes">
+      <div>📖 Miguel de Cervantes</div>
     </div>
-
     <div class="libro-box">
-      <img src="{% static 'hola/js/LaCasaDeLosEspiritus.png' %}" alt="Isabel Allende">
-      <div>📖 La casa de los espíritus – Isabel Allende</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Antoni_Saura_1972.jpg" alt="Antoni Saura">
+      <div>📖 Antoni Saura</div>
     </div>
-
     <div class="libro-box">
-      <img src="{% static 'hola/js/LaMañosa.png' %}" alt="Juan Bosch">
-      <div>📖 La Mañosa – Juan Bosch</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Joan_Bosch.jpg" alt="Joan Bosch">
+      <div>📖 Joan Bosch</div>
     </div>
-
     <div class="libro-box">
-      <img src="{% static 'hola/js/ElReinoDelReves.png' %}" alt="María Elena Walsh">
-      <div>📖 El Reino del Revés – María Elena Walsh</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/LaciudadYLosperros.png' %}" alt="Mario Vargas Llosa">
-      <div>📖 La ciudad y los perros – Mario Vargas Llosa</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/TierraDeAlborada.png' %}" alt="Pedro Mir">
-      <div>📖 Tierra del Alborada – Pedro Mir</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/LaberintoSoledad.png' %}" alt="Octavio Paz">
-      <div>📖 El laberinto de la soledad – Octavio Paz</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/PoesiaCompleta.png' %}" alt="Pablo Neruda">
-      <div>📖 La poesía completa – Pablo Neruda</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/Elprincipito.png' %}" alt="Antoine de Saint-Exupéry">
-      <div>📖 El principito – Antoine de Saint-Exupéry</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/CuentosDeLaSelva.png' %}" alt="Horacio Quiroga">
-      <div>📖 Cuentos de la selva – Horacio Quiroga</div>
-    </div>
-
-    <div class="libro-box">
-      <img src="{% static 'hola/js/LaInvencionDelMorel.png' %}" alt="Adolfo Bioy Casares">
-      <div>📖 La invención de Morel – Adolfo Bioy Casares</div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Horacio.jpg" alt="Horacio">
+      <div>📖 Horacio</div>
     </div>
   </div>
 
-  <!-- Botón principal que lleva a la vista 'principal' -->
-  <a href="{% url 'principal' %}" class="btn-principal">Ir a Principal</a>
+  <img src="{% static 'hola/js/Elprincipito.png' %}" alt="Portada del libro" class="portada-principal">
+
+  <a href="{% url 'contacto' %}" class="btn-principal">🔙 Volver</a>
+
 </div>
 
 <footer> 

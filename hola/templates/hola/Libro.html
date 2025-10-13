@@ -116,8 +116,9 @@
 
         
   .lista-libros {
-      font-size: 420px;   /* Aumenta tamaño de letra */
-      line-height: 1.6;  /* Espaciado entre líneas para que se vea más claro */
+       font-size: 18px;
+       line-height: 1.5;   /* Aumenta tamaño de letra */
+        /* Espaciado entre líneas para que se vea más claro */
   }
 
   .lista-libros li {
@@ -125,11 +126,11 @@
   }
 
   .lista-libros strong {
-      font-size: 12px;   /* El título un poco más grande */
+       font-size: 20px;  /* El título un poco más grande */
   }
 
   .lista-libros small {
-      font-size: 130px;   /* Autor, categoría y estado un poco más pequeños */
+        font-size: 16px;   /* Autor, categoría y estado un poco más pequeños */
       
   }
     </style>
@@ -192,7 +193,8 @@
                 {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
                 {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
                 
-                <td>{{ libro.estado_real }}</td>
+                <span>{{ libro.estado_real }}</span>
+
 
                     
                         

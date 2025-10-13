@@ -110,19 +110,21 @@ def es_bibliotecario(user):
 def vista_bibliotecario(request):
     return render(request, 'hola/bibliotecario.html', {'mensaje': 'Bienvenido Bibliotecario'})
 
-# =========================
-# LIBROS
-# =========================
-@login_required
+# ========================@login_required
 def libros_view(request):
     es_admin = request.user.is_superuser or es_bibliotecario(request.user)
+    
+    # Formulario completo solo para admin
     form = LibroForm(request.POST or None) if es_admin else None
     if request.method == 'POST' and es_admin and form.is_valid():
         form.save()
+        messages.success(request, "Libro guardado correctamente.")
         return redirect('libros')
 
+    # Formulario de búsqueda para todos
     buscar_form = BuscarLibroForm(request.GET or None)
     lista_libros = Libro.objects.all()
+
     if buscar_form.is_valid():
         titulo = buscar_form.cleaned_data.get('titulo')
         autor = buscar_form.cleaned_data.get('autor')
@@ -131,6 +133,7 @@ def libros_view(request):
         if autor: lista_libros = lista_libros.filter(autor=autor)
         if categoria: lista_libros = lista_libros.filter(categoria=categoria)
 
+    # Marcar disponibilidad de cada libro
     for libro in lista_libros:
         libro.disponible = libro.ejemplares > 0
 
@@ -140,6 +143,11 @@ def libros_view(request):
         'buscar_form': buscar_form,
         'es_admin': es_admin
     })
+
+# LIBROS
+# =========================
+@login_required
+
 
 # =========================
 # PRÉSTAMOS

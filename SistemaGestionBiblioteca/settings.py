@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 
 # ==============================
@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'tu_clave_secreta_aqui'
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]  # acepta peticiones externas (Replit)
 
 # ==============================
 # INSTALLED APPS
@@ -26,8 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hola',  # tu app principal
 ]
-
-APPEND_SLASH = True
 
 # ==============================
 # MIDDLEWARE
@@ -46,7 +44,6 @@ MIDDLEWARE = [
 # ROOT URLS
 # ==============================
 ROOT_URLCONF = 'SistemaGestionBiblioteca.urls'
-
 
 # ==============================
 # TEMPLATES
@@ -69,8 +66,10 @@ TEMPLATES = [
 
 # ==============================
 # WSGI
-# ==============================
+
+
 WSGI_APPLICATION = 'SistemaGestionBiblioteca.wsgi.application'
+
 
 
 # ==============================
@@ -87,33 +86,11 @@ DATABASES = {
 # AUTH PASSWORD VALIDATION
 # ==============================
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
-
-# settings.py
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Para Gmail
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'felixromanlebron24@gmail.com'  # Tu correo
-EMAIL_HOST_PASSWORD = 'byjq wfrq ngyk aktj'  # Contraseña de aplicación
-
-
-
-
-
 
 # ==============================
 # INTERNATIONALIZATION
@@ -123,22 +100,22 @@ TIME_ZONE = 'America/Santo_Domingo'
 USE_I18N = True
 USE_TZ = True
 
+# ==============================
+# EMAIL (Gmail)
+# ==============================
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "tu_correo@gmail.com"
+EMAIL_HOST_PASSWORD = "tu_clave_de_aplicacion"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
-
+# ==============================
+# STATIC & MEDIA
+# ==============================
 STATIC_URL = '/static/'
-
-import os
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),  # si tienes carpeta static global
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-
-# ==============================
-# MEDIA FILES (opcional)
-# ==============================
+STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -146,10 +123,22 @@ MEDIA_ROOT = BASE_DIR / "media"
 # DEFAULT AUTO FIELD
 # ==============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# URL a la que se redirige después del login exitoso
-LOGIN_REDIRECT_URL = '/principal/'  # Cambia '/principal/' por la página que quieras
 
-# URL de la página de login (si usas @login_required)
-LOGIN_URL = '/login/'  # Cambia '/login/' por la ruta de tu vista de login
+# ==============================
+# LOGIN
+# ==============================
+LOGIN_REDIRECT_URL = '/principal/'
+LOGIN_URL = '/login/'
+
+
+
+
+
+
+
+
+
+
+
 
 
