@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from datetime import timedelta, date
 from django.utils import timezone
+
+
+
 # ============================
 # 1. Usuario
 # ============================
@@ -179,3 +182,16 @@ class Notificacion(models.Model):
 
     def __str__(self):
         return f"Notif. para {self.usuario} - {self.mensaje[:30]}..."
+
+
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(
+        upload_to='avatars/', 
+        default='avatars/IsabeAllende.png',  # imagen por defecto
+        blank=True
+    )
+
+    def __str__(self):
+        return self.user.username

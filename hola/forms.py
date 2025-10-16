@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Usuario, Libro, Prestamo, Reserva, Categoria, Autor
 from datetime import date
+from .models import Perfil
 
 # -----------------------------
 # Formulario de Usuario
@@ -76,15 +77,7 @@ class PrestamoForm(forms.ModelForm):
 
 
 
-
-
-
-
-
 # Formulario de Reserva
-# ----------------# hola/forms.py
-from django import forms
-from .models import Reserva, Usuario, Libro
 
 class ReservaForm(forms.ModelForm):
     class Meta:
@@ -157,3 +150,10 @@ class BuscarLibroForm(forms.Form):
         empty_label="Todas las categorías",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['avatar']

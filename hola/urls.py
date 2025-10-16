@@ -9,8 +9,9 @@ urlpatterns = [
     # ----------------------
     path('', views.home, name='home'),
     path('login/', views.login_view, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
-
+    path('logout/', views.logout_view, name='logout'),
+    path('perfil/', views.perfil_usuario, name='perfil_usuario'),
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
     # ----------------------
     # Principal y bibliotecario
     # ----------------------

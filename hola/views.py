@@ -3,12 +3,19 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from .forms import PerfilForm
 from datetime import date, timedelta
 from django.http import HttpResponse
+from django.contrib.auth import logout
 from django.urls import reverse
 from django.db.models import Count, F
 from django.db.models.functions import TruncDate
-
+from .forms import PerfilForm
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from .models import Perfil
+from django.urls import reverse
 from .models import Usuario, Libro, Prestamo, Reserva, Categoria, Autor, Multa, Notificacion
 from .forms import (
     PrestamoForm,
@@ -35,6 +42,14 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'hola/login.html', {'form': form})
+
+
+
+
+def logout_view(request):
+    logout(request)  # Cierra la sesión
+     # Redirige directamente al login
+    return redirect(reverse('login'))
 
 
 def registro(request):
@@ -81,14 +96,15 @@ def home(request):
 
 @login_required
 def principal(request):
+    # Asegurarse de que el usuario tenga perfil
+    perfil, created = Perfil.objects.get_or_create(user=request.user)
     usuario = Usuario.objects.filter(user=request.user).first()
     if not usuario:
-        try:
-            usuario = Usuario.objects.create(user=request.user, email=request.user.email)
-        except Exception:
-            messages.error(request, "No se pudo crear el usuario automáticamente.")
-            return redirect('logout')
-    return render(request, 'hola/principal.html', {'usuario': usuario})
+        usuario = Usuario.objects.create(user=request.user, email=request.user.email, nombre=request.user.username, apellido='')
+    return render(request, 'hola/principal.html', {'usuario': usuario, 'perfil': perfil})
+
+
+
 
 # =========================
 # USUARIO
@@ -143,10 +159,6 @@ def libros_view(request):
         'buscar_form': buscar_form,
         'es_admin': es_admin
     })
-
-# LIBROS
-# =========================
-@login_required
 
 
 # =========================
@@ -311,7 +323,14 @@ def devolver_libro(request, libro_id):
     return render(request, "hola/devolucion_exitosa.html", {"libro": libro})
 
 
+@receiver(post_save, sender=User)
+def crear_perfil(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(user=instance)
 
+@receiver(post_save, sender=User)
+def guardar_perfil(sender, instance, **kwargs):
+    instance.perfil.save()
 
 
 
@@ -369,6 +388,25 @@ def perfil_usuario(request):
         else:
             reserva.mensaje = None
     return render(request, 'hola/perfil_usuario.html', {'reservas': reservas})
+
+
+
+@login_required
+def editar_perfil(request):
+    perfil = request.user.perfil  # tu modelo Perfil relacionado 1:1
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Foto de perfil actualizada ✅")
+            return redirect('principal')
+    else:
+        form = PerfilForm(instance=perfil)
+    
+    return render(request, 'hola/editar_perfil.html', {'form': form})
+
+
+
 
 @login_required
 def lista_reservas(request):
@@ -515,15 +553,6 @@ def sitemap_html(request):
 def imagen(request):
     return render(request, 'sandia.html')
 
-
-from django.core.mail import send_mail
-
-from django.http import HttpResponse
-from django.core.mail import send_mail
-
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from .models import Multa
 
 def enviar_notificacion_multa(request, multa_id):
     try:

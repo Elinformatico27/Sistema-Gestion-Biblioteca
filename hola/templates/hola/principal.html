@@ -1,163 +1,171 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Panel Principal - Biblioteca</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    body {
-      background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      margin: 0 40px;
-      padding: 0;
-    }
-    .navbar-nav .nav-item {
-      margin-left: 35px; /* separación horizontal */
-    }
-    .overlay {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background-color: rgba(0,0,0,0.6); z-index: -1;
-    }
-    .content { margin-top: 100px; text-align:center; }
-    .card { 
-      background-color: rgba(255,255,255,0.1); 
-      border:none; 
-      color:#fff; 
-      cursor:pointer; 
-      transition:0.3s;
-      height: 220px;
-    }
-    .card:hover { 
-      background-color: rgba(255,255,255,0.2); 
-      transform: scale(1.05);
-    }
-    .card i { margin-bottom: 15px; }
-    .navbar { background-color: rgba(0,0,0,0.8); }
-    .navbar a { color:#fff !important; }
-    a.card-link { text-decoration:none; color:inherit; }
-    h1 { margin-bottom: 40px; }
-  </style>
-</head>
-<body>
-  <div class="overlay"></div>
+{% extends 'hola/base.html' %}
 
-  <!-- Menú superior -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'principal' %}">SGB</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'principal' %}"><i class="fas fa-home"></i> Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'libros' %}"><i class="fas fa-book"></i> Libros</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'prestamos' %}"><i class="fas fa-handshake"></i> Préstamos</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'reservas' %}"><i class="fas fa-calendar-check"></i> Reservas</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'estadisticas' %}"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'contacto' %}"><i class="fas fa-envelope"></i> Contacto</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'acerca' %}"><i class="fas fa-info-circle"></i> Acerca de Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'perfil_usuario' %}">Perfil</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+{% block title %}Panel Principal - Biblioteca{% endblock %}
 
-  <div class="container content">
-    <h1>¡Bienvenido al Sistema de Gestión de Biblioteca!</h1>
+{% block content %}
+<style>
+  /* 🔹 Fondo general con imagen de biblioteca */
+  body {
+    background: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+    background-size: cover;
+    color: #ffffff;
+    min-height: 100vh;
+  }
 
-    <!-- Cards principales -->
-    <div class="row g-4 mt-4 justify-content-center">
+  /* 🔹 Capa oscura para contraste */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+  }
 
-      <!-- Inventario solo para administradores -->
-      {% if user.is_superuser %}
-      <div class="col-md-3">
-        <a href="{% url 'inventario_sgb' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-boxes fa-3x mb-2" style="color:#f39c12;"></i>
-            <h5>Inventario</h5>
-            <p>Ver todos los libros y disponibilidad</p>
-          </div>
-        </a>
-      </div>
-      {% endif %}
+  /* 🔹 Título de bienvenida */
+  .welcome-text {
+    color: #ffc107; /* amarillo */
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    margin-top: 0px; /* pegado al top */
+    margin-bottom: 20px; /* espacio mínimo antes de las cards */
+  }
 
-      <!-- Libros -->
-      <div class="col-md-3">
-        <a href="{% url 'libros' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-book fa-3x mb-2"></i>
-            <h5>Libros</h5>
-            <p>Gestiona los libros de la biblioteca</p>
-          </div>
-        </a>
-      </div>
+  /* 🔹 Cards principales */
+  .card {
+    background: rgba(0, 64, 128, 0.85);
+    color: #ffffff;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-      <!-- Préstamos -->
-      <div class="col-md-3">
-        <a href="{% url 'prestamos' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-handshake fa-3x mb-2"></i>
-            <h5>Préstamos</h5>
-            <p>Controla préstamos y devoluciones</p>
-          </div>
-        </a>
-      </div>
+  .card i {
+    color: #ffc107;
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+  }
 
-      <!-- Reservas -->
-      <div class="col-md-3">
-        <a href="{% url 'reservas' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-calendar-check fa-3x mb-2"></i>
-            <h5>Reservas</h5>
-            <p>Administra reservas de libros</p>
-          </div>
-        </a>
-      </div>
+  .card h5 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-top: 10px;
+  }
 
-      <!-- Estadísticas -->
-      <div class="col-md-3">
-        <a href="{% url 'estadisticas' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-chart-bar fa-3x mb-2"></i>
-            <h5>Estadísticas</h5>
-            <p>Visualiza reportes y gráficos</p>
-          </div>
-        </a>
-      </div>
+  .card p {
+    color: #eaeaea;
+    font-size: 0.95rem;
+  }
 
-      <!-- Contacto -->
-      <div class="col-md-3">
-        <a href="{% url 'contacto' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-envelope fa-3x mb-2"></i>
-            <h5>Contacto</h5>
-            <p>Redes sociales y más información</p>
-          </div>
-        </a>
-      </div>
+  .card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    filter: brightness(1.15);
+  }
 
-      <!-- Acerca de Nosotros -->
-      <div class="col-md-3">
-        <a href="{% url 'acerca' %}" class="card-link">
-          <div class="card p-4 text-center">
-            <i class="fas fa-info-circle fa-3x mb-2"></i>
-            <h5>Acerca de Nosotros</h5>
-            <p>Conoce nuestra misión y visión</p>
-          </div>
-        </a>
-      </div>
+  .card-link {
+    text-decoration: none;
+  }
 
-    </div>
+  .col-md-3 {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 🔹 Contenedor principal */
+  .content {
+    padding-top: 0px; /* sin espacio superior */
+    padding-bottom: 40px;
+  }
+</style>
+
+<div class="container content">
+  <!-- 🔹 Texto de bienvenida -->
+  <div class="welcome-text">
+    ¡Bienvenido al Sistema de Gestión de Biblioteca!
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  <div class="row g-4 justify-content-center">
+    {% if user.is_superuser %}
+    <div class="col-md-3">
+      <a href="{% url 'inventario_sgb' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-boxes"></i>
+          <h5>Inventario</h5>
+          <p>Ver todos los libros y disponibilidad</p>
+        </div>
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="col-md-3">
+      <a href="{% url 'libros' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-book"></i>
+          <h5>Libros</h5>
+          <p>Gestiona los libros de la biblioteca</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'prestamos' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-handshake"></i>
+          <h5>Préstamos</h5>
+          <p>Controla préstamos y devoluciones</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'reservas' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-calendar-check"></i>
+          <h5>Reservas</h5>
+          <p>Administra reservas de libros</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'estadisticas' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-chart-bar"></i>
+          <h5>Estadísticas</h5>
+          <p>Visualiza reportes y gráficos</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'contacto' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-envelope"></i>
+          <h5>Contacto</h5>
+          <p>Redes sociales y más información</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'acerca' %}" class="card-link">
+        <div class="card p-4 text-center">
+          <i class="fas fa-info-circle"></i>
+          <h5>Acerca de Nosotros</h5>
+          <p>Conoce nuestra misión y visión</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
