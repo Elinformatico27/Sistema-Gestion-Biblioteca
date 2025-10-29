@@ -1,89 +1,147 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Historial de Reservas</title>
-  <style>
-    /* Estilos generales */
-    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
-    h1 { text-align: center; color: #34495e; }
+    <meta charset="UTF-8">
+    <title>Historial de Reservas</title>
 
-    /* Grid de tarjetas */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
-    .card h3 { margin: 0 0 10px; color: #34495e; }
+    <style>
+        body {
+            font-family:'Poppins', sans-serif;
+            margin:0; padding:0;
+            min-height:100vh;
+            color:#fff;
+            background: radial-gradient(circle at top left, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size:400% 400%;
+            animation:fondoGradiente 12s ease infinite;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
 
-    /* Estados */
-    .estado { display: inline-block; padding: 5px 10px; border-radius: 20px; font-weight: bold; margin-top: 10px; }
-    .estado.Pendiente { background: #f39c12; color: white; }
-    .estado.Activo { background: #27ae60; color: white; }
-    .estado.Finalizado { background: #95a5a6; color: white; }
+        @keyframes fondoGradiente {
+            0% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
+            100% { background-position:0% 50%; }
+        }
 
-    /* Botón regresar */
-    .btn-regresar { display: block; margin: 30px auto; padding: 12px 28px; background: #1abc9c; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; text-align: center; }
-    .btn-regresar:hover { background: #159f86; }
+        h1 {
+            text-align:center;
+            font-size:2.8rem;
+            margin-top:40px;
+            margin-bottom:30px;
+            text-shadow:0 0 12px #00d9ff;
+        }
 
-    /* Botones de acción unificados */
-    .acciones form {
-      display: inline-block;
-      margin: 5px 5px 0 0; /* espacio entre botones */
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap:25px;
+            width:90%;
+            max-width:1100px;
+            margin-bottom:30px;
+        }
 
-    .acciones button {
-      padding: 10px 16px;
-      font-size: 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      min-width: 130px; /* mismo tamaño para todos */
-      transition: background 0.3s, transform 0.2s;
-      color: white;
-    }
+        .card {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px);
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-    /* Botón verde: Marcar Finalizado */
-    .btn-finalizado { background-color: #2ecc71; }
-    .btn-finalizado:hover { background-color: #27ae60; transform: translateY(-2px); }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow:0 15px 30px rgba(0,0,0,0.6);
+        }
 
-    /* Botón azul: Limpiar */
-    .btn-limpiar { background-color: #3498db; }
-    .btn-limpiar:hover { background-color: #2980b9; transform: translateY(-2px); }
+        .card h3 {
+            margin:0 0 10px;
+            font-size:1.4rem;
+            text-shadow:0 0 6px #00d9ff;
+        }
 
-  </style>
+        .card p {
+            margin:5px 0;
+            font-size:1rem;
+        }
+
+        .estado {
+            display:inline-block;
+            padding:6px 14px;
+            border-radius:25px;
+            font-weight:bold;
+            font-size:0.95rem;
+            margin-top:10px;
+            color:#fff;
+        }
+
+        .Pendiente { background:#f39c12; }
+        .Confirmada { background:#27ae60; }
+        .Cancelada { background:#e74c3c; }
+
+        .btn-regresar {
+            display:inline-block;
+            padding:12px 28px;
+            background:linear-gradient(135deg,#ff416c,#ff4b2b);
+            color:#fff;
+            text-decoration:none;
+            border-radius:30px;
+            font-weight:700;
+            margin-bottom:40px;
+            transition:0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .btn-regresar:hover {
+            transform:translateY(-4px);
+            box-shadow:0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        footer {
+            width:100%;
+            text-align:center;
+            padding:20px;
+            background:rgba(255,255,255,0.1);
+            backdrop-filter:blur(10px);
+            color:#d4e8ff;
+            font-size:0.9rem;
+            border-top-left-radius:15px;
+            border-top-right-radius:15px;
+            box-shadow:0 -4px 20px rgba(0,0,0,0.5);
+            margin-top:auto;
+        }
+    </style>
 </head>
 <body>
-  <h1>Historial de Reservas</h1>
 
-  <div class="grid">
-    {% for r in reservas %}
-      <div class="card">
-        <h3>{{ r.usuario.username }}</h3>
-        <p><strong>Libro:</strong> {{ r.libro.titulo }}</p>
-        <p><strong>Fecha de Reserva:</strong> {{ r.fecha_inicio|date:"d/m/Y" }}</p>
-        <p><strong>Fecha de Retiro:</strong> {{ r.fecha_fin|date:"d/m/Y" }}</p>
-        <span class="estado {{ r.estado|capfirst }}">{{ r.get_estado_display }}</span>
+    <h1>📚 Historial de Reservas</h1>
 
-        {% if r.estado != 'finalizado' %}
-          <div class="acciones">
-            <!-- Marcar como finalizado -->
-            <form method="post" action="{% url 'marcar_reserva_finalizado' r.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn-finalizado">Marcar Finalizado</button>
-            </form>
+    <div class="grid">
+        {% for r in reservas %}
+        <div class="card">
+            <h3>{{ r.usuario.username }}</h3>
+            <p><strong>Libro:</strong> {{ r.libro.titulo }}</p>
+            <p><strong>Fecha de Reserva:</strong> {{ r.fecha_reserva }}</p>
+            <p><strong>Fecha de Retiro:</strong> {{ r.fecha_retiro }}</p>
+            <span class="estado 
+                {% if r.estado == 'Pendiente' %}Pendiente{% endif %}
+                {% if r.estado == 'Confirmada' %}Confirmada{% endif %}
+                {% if r.estado == 'Cancelada' %}Cancelada{% endif %}">
+                {{ r.estado }}
+            </span>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">No hay reservas registradas.</p>
+        {% endfor %}
+    </div>
 
-            <!-- Limpiar reserva -->
-            <form method="POST" action="{% url 'limpiar_reserva' r.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn-limpiar">Limpiar</button>
-            </form>
-          </div>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p>No hay reservas registradas.</p>
-    {% endfor %}
-  </div>
+    <a href="{% url 'mis_reservas' %}" class="btn-regresar">🏠 Volver a Mis Reservas</a>
 
-  <a href="{% url 'principal' %}" class="btn-regresar">Regresar a la Página Principal</a>
+    <footer>
+        &copy; 2025 Biblioteca Digital — Gestión Moderna de Reservas 📘
+    </footer>
+
 </body>
 </html>

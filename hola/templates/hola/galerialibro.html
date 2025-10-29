@@ -2,143 +2,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Galería de Libros</title>
-<style>
-body { 
-  font-family:'Poppins',sans-serif; 
-  margin:0; padding:0; 
-  background:#0f2027; 
-  color:#fff; 
-  display:flex; flex-direction:column; min-height:100vh;
-}
+  <meta charset="UTF-8">
+  <title>Galería de Libros</title>
+  <style>
+    body { 
+      font-family: 'Poppins', sans-serif;
+      margin: 0; 
+      padding: 0; 
+      background: linear-gradient(135deg, #1f1c2c, #928DAB);
+      color: #fff; 
+      display: flex; 
+      flex-direction: column; 
+      min-height: 100vh; 
+      overflow-x: hidden;
+    }
 
-header { 
-  text-align:center; 
-  padding:40px 20px; 
-  background: linear-gradient(135deg,#6a11cb,#2575fc); 
-  box-shadow:0 4px 25px rgba(0,0,0,0.4);
-}
+    header { 
+      text-align: center; 
+      padding: 50px 20px; 
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
 
-header h1 { margin:0; font-size:2.5rem; }
+    header h1 { 
+      margin: 0; 
+      font-size: 2.8rem; 
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
 
-.main-content {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  margin:40px 20px;
-}
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 40px 20px;
+      flex-grow: 1;
+    }
 
-.grid { 
-  display:grid; 
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); 
-  gap:20px; 
-  justify-items:center;
-  width:100%;
-  max-width:1000px;
-}
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+      gap: 25px; 
+      justify-items: center;
+      width: 100%;
+      max-width: 1200px;
+    }
 
-.grid .libro-box {
-  text-align:center;
-}
+    .libro-box {
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 10px;
+      transition: 0.3s;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.2);
+      backdrop-filter: blur(8px);
+    }
 
-.grid .libro-box img {
-  width:140px;
-  height:200px;
-  border-radius:12px;
-  object-fit:cover;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-  transition:0.3s;
-}
+    .libro-box:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 35px rgba(255,255,255,0.3);
+    }
 
-.grid .libro-box img:hover {
-  transform:scale(1.05);
-  box-shadow:0 10px 25px rgba(0,0,0,0.5);
-}
+    .libro-box img {
+      width: 150px;
+      height: 210px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+    }
 
-.grid .libro-box div {
-  margin-top:8px;
-  font-size:0.9rem;
-  font-weight:500;
-}
+    .libro-box img:hover {
+      transform: scale(1.07);
+    }
 
-.btn-principal { 
-  display:block; 
-  margin:30px auto 0 auto; 
-  padding:12px 25px; 
-  background:linear-gradient(135deg,#ff416c,#ff4b2b); 
-  color:#fff; 
-  border-radius:30px; 
-  font-weight:600; 
-  text-decoration:none; 
-  text-align:center; 
-  width:150px; 
-  transition:0.3s; 
-}
+    .libro-box div {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffdf85;
+    }
 
-.btn-principal:hover { 
-  transform:translateY(-5px); 
-  box-shadow:0 10px 25px rgba(0,0,0,0.5);
-}
+    .btn-principal { 
+      display: inline-block; 
+      margin: 40px auto 0 auto; 
+      padding: 14px 28px; 
+      background: linear-gradient(135deg, #00c6ff, #0072ff); 
+      color: #fff; 
+      border-radius: 30px; 
+      font-weight: 600; 
+      text-decoration: none; 
+      text-align: center; 
+      transition: all 0.3s; 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
 
-.portada-principal {
-  margin-top:40px;
-  width:300px;
-  height:420px;
-  border-radius:12px;
-  object-fit:cover;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
+    .btn-principal:hover { 
+      transform: translateY(-5px); 
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      color: #000;
+      box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+    }
 
-footer { 
-  margin-top:auto; 
-  background:linear-gradient(135deg,#2575fc,#6a11cb); 
-  text-align:center; 
-  padding:20px; 
-  border-top-left-radius:15px; 
-  border-top-right-radius:15px;
-}
-</style>
+    footer { 
+      margin-top: auto; 
+      background: linear-gradient(135deg, #ee0979, #ff6a00); 
+      text-align: center; 
+      padding: 25px; 
+      font-weight: 500;
+      border-top: 2px solid rgba(255,255,255,0.2);
+    }
+
+    footer span {
+      color: #ffeaa7;
+    }
+  </style>
 </head>
+
 <body>
 
 <header>
-  <h1>📚 Top Libros</h1>
+  <h1>📚 Galería de Libros</h1>
 </header>
 
 <div class="main-content">
-
   <div class="grid">
+
+    <!-- Libros destacados -->
     <div class="libro-box">
-      <img src="https:/Isabel_Allende.jpg" alt="Isabel Allende">
+      <img src="{% static 'hola/js/CasaDeEspiritus.png' %}" alt="Isabel Allende">
       <div>📖 Isabel Allende</div>
     </div>
+
     <div class="libro-box">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Miguel_de_Cervantes.jpg" alt="Miguel de Cervantes">
+      <img src="{% static 'hola/js/CienAñosSoledad.png' %}" alt="Cien Años de Soledad">
+      <div>📖 Gabriel García Márquez</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/DonQuijoteDeLaMancha.png' %}" alt="Don Quijote de la Mancha">
       <div>📖 Miguel de Cervantes</div>
     </div>
+
     <div class="libro-box">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Antoni_Saura_1972.jpg" alt="Antoni Saura">
-      <div>📖 Antoni Saura</div>
+      <img src="{% static 'hola/js/PoesiaCompleta.png' %}" alt="Poesía Completa">
+      <div>📖 Pablo Neruda</div>
     </div>
+
     <div class="libro-box">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Joan_Bosch.jpg" alt="Joan Bosch">
-      <div>📖 Joan Bosch</div>
+      <img src="{% static 'hola/js/TierraDeAlborada.png' %}" alt="Tierra de Alborada">
+      <div>📖 Pedro Mir</div>
     </div>
+
     <div class="libro-box">
-      <img src="Horacio.jpg" alt="Horacio">
-      <div>📖 Horacio</div>
+      <img src="{% static 'hola/js/LaciudadYLosperros.png' %}" alt="La ciudad y los perros">
+      <div>📖 Mario Vargas Llosa</div>
     </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/Elprincipito.png' %}" alt="El Principito">
+      <div>📖 Antoine de Saint-Exupéry</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaberintoSoledad.png' %}" alt="El Laberinto de la Soledad">
+      <div>📖 Octavio Paz</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/CuentosDeLaselva.png' %}" alt="Cuentos de la Selva">
+      <div>📖 Horacio Quiroga</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/ElReinoDelReves.png' %}" alt="El Reino del Revés">
+      <div>📖 María Elena Walsh</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaInvencionDelMorel.png' %}" alt="La invención de Morel">
+      <div>📖 Adolfo Bioy Casares</div>
+    </div>
+
+    <div class="libro-box">
+      <img src="{% static 'hola/js/LaMañosa.png' %}" alt="La Mañosa">
+      <div>📖 Juan Bosch</div>
+    </div>
+
   </div>
 
-  <img src="{% static 'hola/js/Elprincipito.png' %}" alt="Portada del libro" class="portada-principal">
-
-  <a href="{% url 'contacto' %}" class="btn-principal">🔙 Volver</a>
-
+  <a href="{% url 'principal' %}" class="btn-principal">🏠 Ir a Página Principal</a>
 </div>
 
 <footer> 
-  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+  <span>&copy; 2025 Biblioteca Digital.</span> Todos los derechos reservados.
 </footer>
 
 </body>

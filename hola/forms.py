@@ -50,71 +50,95 @@ class LibroForm(forms.ModelForm):
 # Formulario de Préstamo
 # -----------------------------
 
+# -----------------------------
+# Formulario de Préstamo
+# -----------------------------
+from django import forms
+from .models import Prestamo, Libro, Usuario
 
 class PrestamoForm(forms.ModelForm):
     class Meta:
         model = Prestamo
         fields = ['usuario', 'libro', 'fecha_limite']
+        widgets = {
+            'fecha_limite': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'libro': forms.Select(attrs={'class': 'form-control'}),
+            'usuario': forms.Select(attrs={'class': 'form-control'}),
+        }
 
     def __init__(self, *args, usuario_logueado=None, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Mostrar solo libros realmente disponibles
+        libros_disponibles = [libro.id for libro in Libro.objects.all() if libro.disponible_real > 0]
+        self.fields['libro'].queryset = Libro.objects.filter(id__in=libros_disponibles)
+
+        # Configuración de usuario
         if usuario_logueado is None:
-            # Por seguridad, si no llega usuario logueado
             self.fields['usuario'].queryset = Usuario.objects.none()
             return
 
-        # Determinar si es admin / bibliotecario
-        es_admin = usuario_logueado.user.is_superuser or usuario_logueado.user.groups.filter(name='Bibliotecario').exists()
+        es_admin = (
+            usuario_logueado.user.is_superuser or
+            usuario_logueado.user.groups.filter(name='Bibliotecario').exists()
+        )
 
         if es_admin:
-            # Admin ve todos los usuarios
             self.fields['usuario'].queryset = Usuario.objects.all()
         else:
-            # Usuario normal solo puede verse a sí mismo
             self.fields['usuario'].queryset = Usuario.objects.filter(pk=usuario_logueado.pk)
             self.fields['usuario'].initial = usuario_logueado
+            self.fields['usuario'].disabled = True
 
 
 
 # Formulario de Reserva
 
+from django.core.exceptions import ValidationError
+
+
 class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['usuario', 'libro', 'fecha_inicio', 'fecha_fin', 'estado']
+        fields = ['usuario', 'libro', 'fecha_inicio', 'fecha_fin']
         widgets = {
-            'fecha_inicio': forms.DateInput(attrs={'type': 'date'}),
-            'fecha_fin': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_inicio': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'fecha_fin': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'libro': forms.Select(attrs={'class': 'form-control'}),
+            'usuario': forms.Select(attrs={'class': 'form-control'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        usuario_logueado = kwargs.pop('usuario', None)  # objeto Usuario logueado
+    def __init__(self, *args, usuario_logueado=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Mostrar solo libros disponibles
-        self.fields['libro'].queryset = Libro.objects.filter(estado='disponible')
+        libros_disponibles = [libro.id for libro in Libro.objects.all() if libro.disponible_real > 0]
+        self.fields['libro'].queryset = Libro.objects.filter(id__in=libros_disponibles)
 
+        # Configuración de usuario
         if usuario_logueado:
-            if usuario_logueado.tipo == 'admin':
-                # Admin: mostrar todos los usuarios
+            es_admin = usuario_logueado.user.is_superuser or usuario_logueado.user.groups.filter(name='Bibliotecario').exists()
+            if es_admin:
                 self.fields['usuario'].queryset = Usuario.objects.all()
-                self.fields['usuario'].disabled = False
             else:
-                # Usuario normal: solo mostrar su propio usuario
-                self.fields['usuario'].queryset = Usuario.objects.filter(id=usuario_logueado.id)
+                self.fields['usuario'].queryset = Usuario.objects.filter(pk=usuario_logueado.pk)
                 self.fields['usuario'].initial = usuario_logueado
                 self.fields['usuario'].disabled = True
+        else:
+            self.fields['usuario'].queryset = Usuario.objects.none()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        fecha_inicio = cleaned_data.get('fecha_inicio')
+        fecha_fin = cleaned_data.get('fecha_fin')
+
+        if fecha_inicio and fecha_fin:
+            if fecha_inicio < date.today():
+                raise ValidationError("La fecha de inicio no puede ser anterior a hoy.")
+            if fecha_fin < fecha_inicio:
+                raise ValidationError("La fecha de finalización no puede ser anterior a la fecha de inicio.")
 
 
-
-
-
-
-
-
-
-# -----------------------------
 # Registro de Usuario
 # -----------------------------
 class CustomUserCreationForm(UserCreationForm):

@@ -2,6 +2,30 @@
 {% load static %}
 
 <style>
+/* ================== Fondo ================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ================== Contenedor ================== */
+.container {
+    width: 700px;
+    margin-top: 10px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
 /* ================== Mensajes ================== */
 .mensajes {
     margin-bottom: 20px;
@@ -12,7 +36,6 @@
     padding: 12px 20px;
     border-radius: 8px;
     margin-bottom: 10px;
-    font-family: Arial, sans-serif;
     font-weight: bold;
     width: 100%;
     box-sizing: border-box;
@@ -21,40 +44,15 @@
     align-items: center;
 }
 
-/* Colores según tipo de mensaje */
-.mensaje.success {
-    background-color: #cce5ff;
-    color: #004085;
-}
+.mensaje.success { background-color: #cce5ff; color: #004085; }
+.mensaje.error   { background-color: #f8d7da; color: #721c24; }
+.mensaje.warning { background-color: #d4edda; color: #155724; }
 
-.mensaje.error {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.mensaje.warning {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-/* Botón cerrar */
 .cerrar {
     cursor: pointer;
     font-weight: bold;
     font-size: 18px;
     margin-left: 15px;
-}
-
-/* ================== Contenedor principal ================== */
-.container {
-    max-width: 700px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
-    background-color: #fff;
 }
 
 /* ================== Títulos ================== */
@@ -91,47 +89,84 @@ select:focus, input[type="date"]:focus {
     outline: none;
 }
 
-/* ================== Botones ================== */
-button, .btn-link, .btn-admin {
+/* ================== Botones uniformes ================== */
+/* ================== Botones uniformes centrados ================== */
+.actions {
+    display: flex;
+    justify-content: center; /* centra horizontalmente */
+    gap: 15px; /* espacio entre botones */
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.btn-uniform {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    padding: 8px 20px; /* delgado, no muy alto */
+    border-radius: 6px;
+    width: 180px;       /* mismo ancho para todos */
+    height: 40px;       /* altura uniforme */
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    line-height: normal;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+/* Colores */
+button.btn-uniform {
+    background-color: #4CAF50;
+    border: none;
+}
+
+button.btn-uniform:hover {
+    background-color: #388e3c;
+}
+
+a.btn-uniform.btn-link {
+    background-color: #f44336;
+}
+
+a.btn-uniform.btn-link:hover {
+    background-color: #d32f2f;
+}
+
+a.btn-admin, button.btn-admin {
+    background-color: #1976d2;
+}
+
+a.btn-admin:hover, button.btn-admin:hover {
+    background-color: #115293;
+}
+
+
+/* Botones admin superusuario con mismo tamaño */
+.btn-admin {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     font-weight: 900;
     font-size: 1.2rem;
     padding: 12px 28px;
     border-radius: 6px;
-    border: none;
+    width: 200px;
+    box-sizing: border-box;
     cursor: pointer;
-    transition: background-color 0.3s;
     text-decoration: none;
-    display: inline-block;
-    margin: 5px 0;
-}
-
-button {
-    background-color: #4CAF50;
+    margin: 5px;
+    transition: background-color 0.3s;
     color: white;
+    text-align: center;
+    line-height: normal;
 }
 
-button:hover {
-    background-color: #388e3c;
-}
-
-.btn-link {
-    background-color: #f44336;
-    color: white;
-    margin-left: 10px;
-}
-
-.btn-link:hover {
-    background-color: #d32f2f;
-}
-
-.btn-admin {
-    background-color: #1976d2;
-    color: white;
-}
-
-.btn-admin:hover {
-    background-color: #115293;
-}
+a.btn-admin { background-color: #1976d2; }
+a.btn-admin:hover { background-color: #115293; }
 
 /* ================== Acciones ================== */
 .actions {
@@ -205,8 +240,8 @@ ul li:last-child {
         </div>
 
         <div class="actions">
-            <button type="submit">Guardar Préstamo</button>
-            <a href="{% url 'principal' %}" class="btn-link">Volver</a>
+            <button type="submit" class="btn-uniform">Guardar Préstamo</button>
+            <a href="{% url 'principal' %}" class="btn-uniform btn-link">Volver</a>
         </div>
 
         {% if request.user.is_superuser %}
@@ -236,16 +271,5 @@ ul li:last-child {
         {% endfor %}
     </ul>
 </div>
-
-<!-- Footer con imagen de fondo -->
-<footer style="position: relative; text-align: center; margin-top: 30px; height: 150px;">
-    <img src="{% static 'images/biblioteca.jpg' %}" 
-         alt="Biblioteca" 
-         style="width:100%; height:100%; object-fit: cover; opacity: 0.3; position: absolute; top:0; left:0;">
-    <div style="position: absolute; top:50%; left:50%; transform: translate(-50%, -50%);
-                font-size: 40px; font-weight: bold; color:blue; text-shadow: 1px 1px 2px #fff;">
-        Biblioteca Virtual 2025
-    </div>
-</footer>
 
 {% endblock %}

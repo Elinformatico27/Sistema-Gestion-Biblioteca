@@ -1,49 +1,59 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Reserva de Libros</title>
+
 <style>
-/* Botones */
-.btn-group {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-start;
-  margin-top: 20px;
+/* ============== GRID 6 BOTONES ============== */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 25px;
 }
 
-.btn, .btn-lista, .btn-limpiar {
-  padding: 12px 25px;
-  font-size: 16px;
+/* Botón base */
+.btn {
+  padding: 14px;
+  font-size: 17px;
   font-weight: bold;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
+  color: white;
   transition: 0.3s;
   text-align: center;
-  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Botón principal */
-.btn { background-color: #0066cc; color: #fff; }
-.btn:hover { background-color: #004a99; }
+/* Colores */
+.btn-orange  { background: #ff8c00; }
+.btn-orange:hover { background: #d97700; }
 
-/* Lista de reservas */
-.btn-lista { background-color: #28a745; color: #fff; }
-.btn-lista:hover { background-color: #1e7e34; }
+.btn-red     { background: #dc3545; }
+.btn-red:hover { background: #a71d2a; }
 
-/* Limpiar reservas */
-.btn-limpiar { background-color: #dc3545; color: #fff; }
-.btn-limpiar:hover { background-color: #a71d2a; }
+.btn-green   { background: #28a745; }
+.btn-green:hover { background: #1e7e34; }
 
-/* Mensajes */
+.btn-blue    { background: #007bff; }
+.btn-blue:hover { background: #0056b3; }
+
+/* NUEVO: Botón Perfil */
+.btn-purple  { background: #6f42c1; }
+.btn-purple:hover { background: #59359e; }
+
+/* ============== Mensajes ============== */
 .mensajes { margin-bottom: 20px; width: 100%; }
 .mensaje { padding: 12px 20px; border-radius: 8px; margin-bottom: 10px; font-family: Arial, sans-serif; font-weight: bold; width: 100%; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
 .mensaje.success { background-color: #cce5ff; color: #004085; }
 .mensaje.error { background-color: #f8d7da; color: #721c24; }
 .mensaje.warning { background-color: #fff3cd; color: #856404; }
 
-/* Fondo */
+/* ============== Fondo ============== */
 body {
   margin: 0; padding: 0; font-family: 'Arial', sans-serif;
   background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
@@ -62,15 +72,19 @@ body::before {
 h2 { text-align: center; color: #222; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 .form-group { margin-bottom: 20px; }
 label { font-weight: bold; display: block; margin-bottom: 8px; }
-select, input[type="date"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; outline: none; font-size: 16px; }
+select, input[type="date"] {
+  width: 100%; padding: 10px;
+  border-radius: 8px; border: 1px solid #333;
+  outline: none; font-size: 16px;
+}
 select:focus, input:focus { border-color: #0066cc; box-shadow: 0 0 10px rgba(0,102,204,0.5); }
 
 select.lector { font-weight: bold; color: #000; background-color: #eaeaea; }
 
+/* Responsive */
 @media (max-width: 750px) {
   .reserva-container { width: 90%; padding: 20px; }
-  .btn-group { flex-direction: column; }
-  .btn, .btn-lista, .btn-limpiar { width: 100%; margin-bottom: 10px; }
+  .btn-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -89,9 +103,9 @@ select.lector { font-weight: bold; color: #000; background-color: #eaeaea; }
     </div>
   {% endif %}
 
+  <!-- 📌 FORM PRINCIPAL -->
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
 
     <!-- Usuario -->
     <div class="form-group">
@@ -137,46 +151,41 @@ select.lector { font-weight: bold; color: #000; background-color: #eaeaea; }
       <input type="date" name="fecha_fin" id="fecha_fin" required>
     </div>
 
-    <!-- Botones principales -->
-    <div class="btn-group">
-      <button type="submit" name="accion" value="reservar" class="btn">Reservar</button>
-      <a href="{% url 'principal' %}" class="btn">Volver</a>
+    <!-- ========== BOTONES 3 ARRIBA + 3 ABAJO ========== -->
+    <div class="btn-grid">
 
-      <!-- Admin/Bibliotecario -->
+      <button type="submit" name="accion" value="reservar" class="btn btn-orange">
+        Reservar
+      </button>
+
       {% if es_admin %}
-        <a href="{% url 'lista_reservas' %}" class="btn-lista">Ver lista de reservas</a>
-
-        <form method="post" action="{% url 'limpiar_todas_reservas' %}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="btn-limpiar"
-                  onclick="return confirm('¿Está seguro que desea limpiar todas las reservas?');">
-            Limpiar Todas
-          </button>
-        </form>
-
-        <form method="post" action="{% url 'limpiar_reservas_finalizadas' %}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="btn-limpiar"
-                  onclick="return confirm('¿Está seguro que desea eliminar solo las reservas finalizadas?');">
-            Limpiar Finalizadas
-          </button>
-        </form>
+      <a href="{% url 'lista_reservas' %}" class="btn btn-green">
+        Ver Reservas
+      </a>
       {% endif %}
 
-      <!-- Lector normal -->
+      <a href="{% url 'perfil_usuario' %}" class="btn btn-purple">
+        Perfil
+      </a>
+
+      <a href="{% url 'principal' %}" class="btn btn-red">
+        Volver
+      </a>
+
       {% if user.is_authenticated and not es_admin %}
-        <a href="{% url 'mis_reservas' %}" class="btn-lista">Mis Reservas</a>
-        <a href="{% url 'perfil_usuario' %}" class="btn">Perfil</a>
+      <a href="{% url 'mis_reservas' %}" class="btn btn-blue">
+        Mis Reservas
+      </a>
       {% endif %}
     </div>
+
   </form>
 </div>
 
 <script>
-// Cierre automático de mensajes
 setTimeout(() => {
   document.querySelectorAll('.mensaje').forEach(msg => msg.style.display='none');
-}, 5000);
+}, 5005);
 </script>
 </body>
 </html>

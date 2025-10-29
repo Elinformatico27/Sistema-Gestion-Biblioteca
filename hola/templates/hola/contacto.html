@@ -3,55 +3,138 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Galerías y Contacto</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
-        integrity="sha512-MZb8z+y0DStvX6G6N4zG3f5P/2GcF6aSkhU6XK+f+JQK2lZ8R/9b3nM0HRk6sm8gYXsx1X6wA1v7Xo3+pjxKmg==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Redes Sociales - Biblioteca</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
   <style>
-    body { font-family:'Poppins',sans-serif; margin:0; padding:0; background:#0f2027; color:#fff; display:flex; flex-direction:column; min-height:100vh;}
-    header { text-align:center; padding:60px 20px; background: linear-gradient(135deg,#6a11cb,#2575fc); box-shadow:0 4px 25px rgba(0,0,0,0.4);}
-    header h1 { font-size:3rem; margin:0;}
-    header p { font-size:1.2rem; margin-top:10px;}
-    .menu-container { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; padding:40px 20px;}
-    .card { width:220px; height:220px; border-radius:25px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-weight:600; font-size:1.1rem; cursor:pointer; transition:0.3s; }
-    .card i { font-size:4rem; margin-bottom:15px; }
-    .card:hover { transform:translateY(-10px) scale(1.05); }
-    .contacto { background:linear-gradient(135deg,#1fd1f9,#b621fe);}
-    .libros { background:linear-gradient(135deg,#f7971e,#ffd200);}
-    .escritores { background:linear-gradient(135deg,#7f00ff,#e100ff);}
-    .btn-principal { display:block; margin:40px auto 0 auto; padding:12px 25px; background:linear-gradient(135deg,#ff416c,#ff4b2b); color:#fff; border-radius:30px; font-weight:600; text-decoration:none; text-align:center; width:150px; }
-    .btn-principal:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.5);}
-    footer { margin-top:auto; background:linear-gradient(135deg,#2575fc,#6a11cb); text-align:center; padding:20px; border-top-left-radius:15px; border-top-right-radius:15px;}
+    body { 
+      font-family:'Poppins',sans-serif;
+      margin:0; padding:0;
+      min-height:100vh;
+      color:#fff;
+      background: radial-gradient(circle at top left, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: fondoGradiente 12s ease infinite;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    @keyframes fondoGradiente {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
+
+    header {
+      text-align:center;
+      padding:60px 20px 30px 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid rgba(255,255,255,0.25);
+      width:100%;
+      box-shadow:0 6px 20px rgba(0,0,0,0.5);
+    }
+    header h1 { font-size:2.8rem; margin:0; text-shadow:0 0 20px #00d9ff; }
+
+    .redes-container {
+      max-width:800px;
+      width:90%;
+      margin:40px auto;
+      padding:30px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius:20px;
+      text-align:center;
+      box-shadow:0 10px 25px rgba(0,0,0,0.5);
+      color:#00d9ff;
+    }
+
+    .redes-container h2 { font-size:2rem; margin-bottom:20px; }
+    .redes-container p { font-size:1.1rem; margin-bottom:25px; }
+
+    .social-icons {
+      display:flex;
+      justify-content:center;
+      gap:35px;
+      flex-wrap:wrap;
+    }
+    .social-icons a {
+      font-size:3rem;
+      transition:0.4s ease;
+      color:#00d9ff;
+      text-decoration:none;
+    }
+    .social-icons a:hover { transform:scale(1.2); color:#00ffa3; }
+
+    .facebook { color:#1877f2; }
+    .instagram { color:#e1306c; }
+    .whatsapp { color:#25d366; }
+    .twitter { color:#1da1f2; }
+    .gmail { color:#d44638; }
+
+    .btn-volver {
+      display:inline-block;
+      margin:30px auto 0 auto;
+      padding:12px 25px;
+      background: linear-gradient(135deg,#ff416c,#ff4b2b);
+      color:#fff;
+      border-radius:30px;
+      font-weight:700;
+      text-decoration:none;
+      transition:0.3s;
+      box-shadow:0 4px 15px rgba(0,0,0,0.4);
+    }
+    .btn-volver:hover { transform:translateY(-4px); box-shadow:0 8px 25px rgba(0,0,0,0.5); }
+
+    footer {
+      margin-top:auto;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      text-align:center;
+      padding:15px;
+      width:100%;
+      font-size:0.9rem;
+      border-top-left-radius:15px;
+      border-top-right-radius:15px;
+      box-shadow:0 -4px 20px rgba(0,0,0,0.4);
+      color:#d4e8ff;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>📚 Galerías y Contacto</h1>
-  <p>Explora nuestra biblioteca y conoce a los escritores de América Latina</p>
-  <a href="{% url 'principal' %}" class="btn-principal">🏠 Inicio</a>
+  <h1>🌐 Síguenos en Redes Sociales</h1>
 </header>
 
-<div class="menu-container">
-  <a href="{% url 'redessociales' %}" class="card contacto">
-    <i class="fab fa-facebook-square"></i>
-    <i class="fab fa-whatsapp-square"></i>
-    <i class="fab fa-instagram-square"></i>
-    <p>Contacto</p>
-  </a>
+<div class="redes-container">
+  <h2>Conéctate con Nosotros</h2>
+  <p>Forma parte de nuestra comunidad digital. Comparte, comenta y mantente al tanto de las últimas novedades literarias.</p>
 
-  <a href="{% url 'galerialibro' %}" class="card libros">
-    <i class="fas fa-book-open"></i>
-    <p>Galería de Libros</p>
-  </a>
+  <div class="social-icons">
+    <a href="https://www.facebook.com/profile.php/?id=100008719270821" class="facebook" target="_blank" title="Facebook">
+      <i class="fab fa-facebook-square"></i>
+    </a>
+    <a href="https://www.instagram.com/bibliotecado.pedro/?hl=es-la" class="instagram" target="_blank" title="Instagram">
+      <i class="fab fa-instagram-square"></i>
+    </a>
+    <a href="https://wa.me/1234567890" class="whatsapp" target="_blank" title="WhatsApp">
+      <i class="fab fa-whatsapp-square"></i>
+    </a>
+    <a href="https://twitter.com/tu_usuario" class="twitter" target="_blank" title="Twitter">
+      <i class="fab fa-twitter-square"></i>
+    </a>
+    <a href="mailto:biblioteca@gmail.com" class="gmail" target="_blank" title="Gmail">
+      <i class="fas fa-envelope-square"></i>
+    </a>
+  </div>
 
-  <a href="{% url 'escritores' %}" class="card escritores">
-    <i class="fas fa-user-edit"></i>
-    <p>Escritores</p>
-  </a>
+  <a href="{% url 'principal' %}" class="btn-volver">🏠 Volver</a>
 </div>
+
 <footer>
-  &copy; 2025 Biblioteca Digital. Todos los derechos reservados.
+  &copy; 2025 Biblioteca Digital — Conectando lectores en todo el mundo.
 </footer>
 
 </body>

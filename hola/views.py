@@ -127,33 +127,64 @@ def vista_bibliotecario(request):
     return render(request, 'hola/bibliotecario.html', {'mensaje': 'Bienvenido Bibliotecario'})
 
 # ========================@login_required
+@login_required
 def libros_view(request):
     es_admin = request.user.is_superuser or es_bibliotecario(request.user)
-    
-    # Formulario completo solo para admin
+
+    # Formulario creación (solo admin/bibliotecario)
     form = LibroForm(request.POST or None) if es_admin else None
-    if request.method == 'POST' and es_admin and form.is_valid():
-        form.save()
-        messages.success(request, "Libro guardado correctamente.")
+    if request.method == 'POST' and es_admin and form is not None and form.is_valid():
+        libro_nuevo = form.save()
+        messages.success(request, f"📘 Libro '{libro_nuevo.titulo}' creado correctamente.")
         return redirect('libros')
 
-    # Formulario de búsqueda para todos
+    # Formulario de búsqueda
     buscar_form = BuscarLibroForm(request.GET or None)
-    lista_libros = Libro.objects.all()
+    lista_libros = Libro.objects.all()  # mostramos todos los libros
 
     if buscar_form.is_valid():
         titulo = buscar_form.cleaned_data.get('titulo')
         autor = buscar_form.cleaned_data.get('autor')
         categoria = buscar_form.cleaned_data.get('categoria')
-        if titulo: lista_libros = lista_libros.filter(titulo__icontains=titulo)
-        if autor: lista_libros = lista_libros.filter(autor=autor)
-        if categoria: lista_libros = lista_libros.filter(categoria=categoria)
 
-    # Marcar disponibilidad de cada libro
+        if titulo:
+            # título puede ser instancia, id o texto
+            try:
+                # si es instancia de modelo
+                if hasattr(titulo, 'id'):
+                    lista_libros = lista_libros.filter(id=titulo.id)
+                else:
+                    try:
+                        tid = int(titulo)
+                        lista_libros = lista_libros.filter(id=tid)
+                    except (ValueError, TypeError):
+                        lista_libros = lista_libros.filter(titulo__icontains=str(titulo))
+            except Exception:
+                lista_libros = lista_libros.filter(titulo__icontains=str(titulo))
+
+        if autor:
+            lista_libros = lista_libros.filter(autor_id=getattr(autor, 'id', autor))
+
+        if categoria:
+            lista_libros = lista_libros.filter(categoria_id=getattr(categoria, 'id', categoria))
+
+    # Construir atributo no persistente para mostrar en plantilla
     for libro in lista_libros:
-        libro.disponible = libro.ejemplares > 0
+        disponible_real = getattr(libro, 'disponible_real', None)
+        if disponible_real is None:
+            ejemplares = getattr(libro, 'ejemplares', None)
+            if ejemplares is None:
+                libro.disponible = bool(getattr(libro, 'disponible', False))
+            else:
+                libro.disponible = ejemplares > 0
+        else:
+            libro.disponible = (disponible_real > 0) if isinstance(disponible_real, (int, float)) else bool(disponible_real)
 
-    return render(request, 'hola/libro.html', {
+        # NO tocar estado_real (es property). Usamos estado_display
+        estado_text = "✅ Disponible" if libro.disponible else "❌ No disponible"
+        setattr(libro, 'estado_display', estado_text)
+
+    return render(request, 'hola/Libro.html', {
         'libros': lista_libros,
         'form': form,
         'buscar_form': buscar_form,
@@ -161,30 +192,47 @@ def libros_view(request):
     })
 
 
+
 # =========================
 # PRÉSTAMOS
 # =========================
 @login_required
 def prestamos(request):
-    usuario_logueado = Usuario.objects.get(user=request.user)
-    es_admin = request.user.is_superuser or es_bibliotecario(request.user)
+    # Usuario que está usando el sistema
+    usuario_logueado = get_object_or_404(Usuario, user=request.user)
+
+    # Verificar si es admin/bibliotecario
+    es_admin = request.user.is_superuser or request.user.groups.filter(name='Bibliotecario').exists()
+
+    # Crear formulario de préstamo, filtrando solo libros disponibles
     form = PrestamoForm(request.POST or None, usuario_logueado=usuario_logueado)
 
     if request.method == 'POST' and form.is_valid():
         libro = form.cleaned_data['libro']
-        if libro.ejemplares <= 0:
+
+        # Verificar disponibilidad real
+        if libro.disponible_real <= 0:
             messages.error(request, f"El libro '{libro.titulo}' no tiene ejemplares disponibles.")
             return redirect('prestamos')
 
+        # Guardar préstamo
         prestamo = form.save(commit=False)
         if not es_admin:
             prestamo.usuario = usuario_logueado
         prestamo.save()
-        Libro.objects.filter(id=libro.id).update(ejemplares=F('ejemplares') - 1)
-        messages.success(request, f"Préstamo del libro '{libro.titulo}' guardado correctamente.")
-        form = PrestamoForm(usuario_logueado=usuario_logueado)
 
-    return render(request, 'hola/prestamos.html', {'form': form, 'es_admin': es_admin})
+        # Reducir ejemplares del libro
+        Libro.objects.filter(id=libro.id).update(ejemplares=F('ejemplares') - 1)
+
+        messages.success(request, f"Préstamo del libro '{libro.titulo}' guardado correctamente.")
+        form = PrestamoForm(usuario_logueado=usuario_logueado)  # Reset formulario
+
+    return render(request, 'hola/prestamos.html', {
+        'form': form,
+        'es_admin': es_admin
+    })
+
+
 
 @login_required
 def devolver_prestamo(request, pk):
@@ -256,46 +304,54 @@ def eliminar_prestamos(request):
     return redirect('listaprestamos')
 # =========================
 # RESERVAS
-# =========================
+# =======================
+
+
 @login_required
 def reservas(request):
-    es_admin = request.user.is_superuser or es_bibliotecario(request.user)
+    usuario_logueado = Usuario.objects.get(user=request.user)
+    es_admin = request.user.is_superuser or request.user.groups.filter(name='Bibliotecario').exists()
+
     if request.method == "POST":
-        libro_id = request.POST.get("libro")
-        libro = get_object_or_404(Libro, id=libro_id)
-        usuario = None
+        form = ReservaForm(request.POST, usuario_logueado=usuario_logueado)
+        if form.is_valid():
+            reserva = form.save(commit=False)
 
-        if es_admin:
-            usuario_id = request.POST.get("usuario")
-            if not usuario_id:
-                messages.error(request, "Debe seleccionar un usuario para la reserva.")
+            # Si no es admin, forzar que el usuario sea el logueado
+            if not es_admin:
+                reserva.usuario = usuario_logueado
+
+            # Verificar disponibilidad del libro
+            if reserva.libro.disponible_real <= 0:
+                messages.error(request, f"El libro '{reserva.libro.titulo}' no está disponible actualmente.")
                 return redirect('reservas')
-            usuario = get_object_or_404(Usuario, id=usuario_id)
+
+            reserva.estado = 'activo'  # Se asigna automáticamente
+            reserva.save()
+            messages.success(request, f"Reserva del libro '{reserva.libro.titulo}' guardada correctamente ✅")
+            return redirect('mis_reservas')
         else:
-            usuario = request.user.usuario
+            # Si hay errores de validación (como fechas)
+            for error in form.non_field_errors():
+                messages.error(request, error)
 
-        if libro.ejemplares > 0:
-            reserva = Reserva.objects.create(
-                usuario=usuario,
-                libro=libro,
-                estado='activo',
-                fecha_inicio=date.today(),
-                fecha_fin=date.today() + timedelta(days=7)
-            )
-            libro.ejemplares -= 1
-            libro.save()
-            messages.success(request, f"Reserva del libro '{libro.titulo}' realizada correctamente.")
-        else:
-            reserva = Reserva.objects.create(usuario=usuario, libro=libro, estado='pendiente')
-            messages.info(request,
-                f"El libro '{libro.titulo}' está prestado/reservado y no está disponible por el momento. Se le avisará cuando esté disponible."
-            )
+    else:
+        form = ReservaForm(usuario_logueado=usuario_logueado)
 
-        return redirect("mis_reservas")
+    # Mostrar solo los usuarios y libros según rol
+    libros = [libro for libro in Libro.objects.all() if libro.disponible_real > 0]
+    usuarios = Usuario.objects.all() if es_admin else [usuario_logueado]
 
-    libros = Libro.objects.all()
-    usuarios = Usuario.objects.all() if es_admin else [request.user.usuario]
-    return render(request, "hola/reservas.html", {"libros": libros, "usuarios": usuarios, "es_admin": es_admin})
+    return render(request, "hola/reservas.html", {
+        "form": form,
+        "libros": libros,
+        "usuarios": usuarios,
+        "es_admin": es_admin
+    })
+
+
+
+
 
 
 @login_required

@@ -4,9 +4,6 @@ from django.core.validators import MinValueValidator, RegexValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from datetime import timedelta, date
-from django.utils import timezone
-
-
 
 # ============================
 # 1. Usuario
@@ -21,7 +18,7 @@ class Usuario(models.Model):
     apellido = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     tipo = models.CharField(max_length=10, choices=TIPO_USUARIO, default='lector')
-    fecha_registro = models.DateTimeField(auto_now_add=True)  # Cambiado a DateTimeField
+    fecha_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
@@ -90,7 +87,6 @@ class Libro(models.Model):
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='disponible')
     etiquetas = models.ManyToManyField(Etiqueta, blank=True)
 
-    
     def __str__(self):
         return f"{self.titulo} ({self.estado_real})"
 
@@ -101,56 +97,23 @@ class Libro(models.Model):
 
     @property
     def estado_real(self):
-     return "Disponible" if self.disponible_real > 0 else "No disponible"
-
-
-    
+        return "Disponible" if self.disponible_real > 0 else "No disponible"
 
 # ============================
-# 8. Reserva
+# 7. Prestamo
 # ============================
-
-class Reserva(models.Model):
-    ESTADO_CHOICES = [
-        ('pendiente', 'Pendiente'),
-        ('activo', 'Activo'),
-        ('finalizado', 'Finalizado'),
-    ]
-
-    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
-    libro = models.ForeignKey('Libro', on_delete=models.CASCADE)
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
-
-    def __str__(self):
-        return f"{self.usuario} → {self.libro} ({self.estado})"
-
-
-
-# ============================
-# Prestamo
-# ===========================
-
-
 class Prestamo(models.Model):
-    usuario = models.ForeignKey("Usuario", on_delete=models.CASCADE)
-    libro = models.ForeignKey("Libro", on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fecha_prestamo = models.DateTimeField(auto_now_add=True)
     fecha_limite = models.DateField()
     fecha_devolucion = models.DateField(null=True, blank=True)
     devuelto = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        # Bloquear si el usuario tiene multas pendientes
-        if Multa.objects.filter(prestamo__usuario=self.usuario, pagada=False).exists():
-            raise ValidationError("No puedes tomar un nuevo libro, tienes multas pendientes.")
-
-        # Fecha límite 5 días después de crear el préstamo
+        # Fecha límite 2 días después del préstamo
         if not self.pk:
-             self.fecha_limite = date.today() + timedelta(days=2) 
-         
-         
+            self.fecha_limite = date.today() + timedelta(days=2)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -158,7 +121,26 @@ class Prestamo(models.Model):
         return f"{self.usuario} → {self.libro} ({estado})"
 
 # ============================
-# Multa (relacionada a Prestamo)
+# 8. Reserva
+# ============================
+class Reserva(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('activo', 'Activo'),
+        ('finalizado', 'Finalizado'),
+    ]
+
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+
+    def __str__(self):
+        return f"{self.usuario} → {self.libro} ({self.estado})"
+
+# ============================
+# 9. Multa
 # ============================
 class Multa(models.Model):
     prestamo = models.ForeignKey(Prestamo, on_delete=models.CASCADE, null=True, blank=True)
@@ -171,10 +153,10 @@ class Multa(models.Model):
         return f"Multa ${self.monto} - {self.prestamo.libro.titulo} ({estado})"
 
 # ============================
-# Notificacion (opcionalmente relacionada a Prestamo)
+# 10. Notificacion
 # ============================
 class Notificacion(models.Model):
-    usuario = models.ForeignKey("Usuario", on_delete=models.CASCADE, related_name="notificaciones")
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="notificaciones")
     prestamo = models.ForeignKey(Prestamo, on_delete=models.CASCADE, null=True, blank=True, related_name="notificaciones")
     mensaje = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
@@ -183,13 +165,14 @@ class Notificacion(models.Model):
     def __str__(self):
         return f"Notif. para {self.usuario} - {self.mensaje[:30]}..."
 
-
-
+# ============================
+# 11. Perfil
+# ============================
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(
         upload_to='avatars/', 
-        default='avatars/IsabeAllende.png',  # imagen por defecto
+        default='avatars/IsabeAllende.png',
         blank=True
     )
 

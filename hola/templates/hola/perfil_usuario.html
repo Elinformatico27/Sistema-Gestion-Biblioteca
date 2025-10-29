@@ -1,66 +1,129 @@
-{% block title %}Perfil{% endblock %}
+{% block title %}
+{% endblock %}
 
 {% block content %}
 <style>
-body {
-    background: linear-gradient(to right, #f0f4f8, #d9e2ec);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.profile-card {
-    max-width: 700px;
-    margin: 50px auto;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    padding: 30px;
-    text-align: center;
-    transition: transform 0.3s;
-}
-.profile-card:hover { transform: translateY(-5px); }
-.profile-icon {
-    width: 100px;
-    height: 100px;
-    background: #3498db;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
-    font-size: 50px;
-    color: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-.btn-custom {
-    display: inline-block;
-    margin: 10px;
-    padding: 12px 28px;
-    background: #1abc9c;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
-}
-.btn-custom:hover { background: #16a085; transform: translateY(-2px); }
-.btn-inventario {
-    display: inline-block;
-    margin: 10px;
-    padding: 12px 28px;
-    background: #f39c12;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
-}
-.btn-inventario:hover { background: #e67e22; transform: translateY(-2px); }
-.list-group-item {
-    border-radius: 8px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.badge-info { background-color: #3498db; color: white; font-weight: bold; }
-.text-muted { color: #7f8c8d; font-style: italic; }
+    body {
+        font-family:'Poppins', sans-serif;
+        margin:0; padding:0;
+        min-height:100vh;
+        color:#fff;
+        background: radial-gradient(circle at top left, #1a2a6c, #b21f1f, #fdbb2d);
+        background-size:400% 400%;
+        animation:fondoGradiente 12s ease infinite;
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
+        padding-top:50px;
+    }
+
+    @keyframes fondoGradiente {
+        0% { background-position:0% 50%; }
+        50% { background-position:100% 50%; }
+        100% { background-position:0% 50%; }
+    }
+
+    .profile-card {
+        max-width: 700px;
+        width: 90%;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow:0 15px 30px rgba(0,0,0,0.6);
+    }
+
+    .profile-icon {
+        width:100px;
+        height:100px;
+        background:#3498db;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        margin:0 auto 20px auto;
+        font-size:50px;
+        color:white;
+        box-shadow:0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .btn-custom, .btn-inventario {
+        display:inline-block;
+        margin:10px 5px;
+        padding:12px 28px;
+        border-radius:30px;
+        font-weight:700;
+        text-decoration:none;
+        color:white;
+        transition:0.3s;
+        box-shadow:0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .btn-custom {
+        background: linear-gradient(135deg,#ff416c,#ff4b2b);
+    }
+
+    .btn-custom:hover {
+        transform:translateY(-4px);
+        box-shadow:0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    .btn-inventario {
+        background: linear-gradient(135deg,#1abc9c,#16a085);
+    }
+
+    .btn-inventario:hover {
+        transform:translateY(-4px);
+        box-shadow:0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+        font-size:2rem;
+        margin:15px 0 25px 0;
+        text-shadow:0 0 12px #00d9ff;
+    }
+
+    .list-group {
+        list-style:none;
+        padding:0;
+        margin-top:20px;
+    }
+
+    .list-group-item {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(8px);
+        margin-bottom:10px;
+        padding:10px 15px;
+        border-radius:15px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .badge {
+        padding:5px 12px;
+        border-radius:20px;
+        font-weight:bold;
+        color:white;
+    }
+
+    .Pendiente { background:#f39c12; }
+    .Confirmada { background:#27ae60; }
+    .Cancelada { background:#e74c3c; }
+
+    .text-muted {
+        color:#dcdcdc;
+        font-style:italic;
+        margin-top:15px;
+    }
 </style>
 
 <div class="profile-card">
@@ -85,17 +148,17 @@ body {
         </a>
 
         {% if reservas %}
-            <h5 class="mt-4">Resumen de todas las reservas:</h5>
-            <ul class="list-group text-start">
+            <h5>Resumen de todas las reservas:</h5>
+            <ul class="list-group">
                 {% for reserva in reservas %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         {{ reserva.libro.titulo }} - {{ reserva.usuario.username }}
-                        <span class="badge badge-info">{{ reserva.get_estado_display }}</span>
+                        <span class="badge {{ reserva.estado }}">{{ reserva.get_estado_display }}</span>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-muted mt-3">No hay reservas registradas.</p>
+            <p class="text-muted">No hay reservas registradas.</p>
         {% endif %}
 
     {% else %}
@@ -103,22 +166,22 @@ body {
         <a href="{% url 'mis_reservas' %}" class="btn-custom">
             <i class="fas fa-calendar-check"></i> Mis Reservas
             {% if reservas|length > 0 %}
-                <span class="badge bg-danger">{{ reservas|length }}</span>
+                <span class="badge Confirmada">{{ reservas|length }}</span>
             {% endif %}
         </a>
 
         {% if reservas %}
-            <h5 class="mt-4">Resumen de tus reservas:</h5>
-            <ul class="list-group text-start">
+            <h5>Resumen de tus reservas:</h5>
+            <ul class="list-group">
                 {% for reserva in reservas %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         {{ reserva.libro.titulo }}
-                        <span class="badge badge-info">{{ reserva.get_estado_display }}</span>
+                        <span class="badge {{ reserva.estado }}">{{ reserva.get_estado_display }}</span>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-muted mt-3">No tienes reservas activas.</p>
+            <p class="text-muted">No tienes reservas activas.</p>
         {% endif %}
     {% endif %}
 </div>

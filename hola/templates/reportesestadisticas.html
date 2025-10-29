@@ -1,18 +1,177 @@
-<h2>Reporte de Estadísticas de la Biblioteca</h2>
+{% extends 'hola/base.html' %}
+{% load static %}
 
-<h3>Top 5 Libros más Prestados</h3>
-<ul>
-  {% for libro in top_prestados %}
-    <li>{{ libro.libro__titulo }} - {{ libro.total }} préstamos</li>
-  {% endfor %}
-</ul>
+{% block title %}📊 Reportes - Estadísticas{% endblock %}
 
-<h3>Top 5 Libros más Reservados</h3>
-<ul>
-  {% for libro in top_reservados %}
-    <li>{{ libro.libro__titulo }} - {{ libro.total }} reservas</li>
-  {% endfor %}
-</ul>
+{% block content %}
+<style>
+  /* Contenedor general */
+  .reports-wrap {
+    margin-top: 24px;
+    margin-bottom: 40px;
+  }
 
-<p>Total de préstamos: {{ total_prestamos }}</p>
-<p>Usuarios activos: {{ usuarios_activos }}</p>
+  /* Tarjetas de métricas */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+
+  .metric-card {
+    background: linear-gradient(180deg, #ffffff, #fbfbfb);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(15,32,39,0.06);
+    transition: transform .18s ease, box-shadow .18s ease;
+    text-align: center;
+  }
+  .metric-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(15,32,39,0.09);
+  }
+  .metric-label {
+    display:block;
+    font-size:0.95rem;
+    color:#374151;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .metric-value {
+    font-size:2rem;
+    color:#0f1724;
+    font-weight:800;
+  }
+
+  /* Tarjeta de gráfico */
+  .chart-card {
+    margin-top: 22px;
+    background: linear-gradient(180deg,#ffffff,#f7fbff);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(15,32,39,0.06);
+  }
+
+  /* Lista Top */
+  .top-lists {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .top-list {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 6px 14px rgba(15,32,39,0.04);
+  }
+  .top-list h4 {
+    margin-bottom:12px;
+    font-size:1rem;
+    color:#0f1724;
+  }
+  .top-list ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+  }
+  .top-list li {
+    padding:10px 8px;
+    border-radius:8px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background: linear-gradient(90deg, rgba(255,255,255,1), rgba(250,250,252,1));
+    border-left: 6px solid transparent;
+  }
+  .top-list li:nth-child(odd) { background:#fbfcff; }
+  .top-count {
+    font-weight:700;
+    color:#111827;
+  }
+
+  /* Pie de página dentro del contenido */
+  .small-note {
+    color:#6b7280;
+    font-size:0.92rem;
+    margin-top:10px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 720px) {
+    .top-lists { grid-template-columns: 1fr; }
+  }
+
+  /* Estética general (no rompe base) */
+  h2.section-title {
+    font-size:1.4rem;
+    color:#0f1724;
+    margin-bottom:6px;
+    font-weight:700;
+  }
+  p.section-sub {
+    color:#6b7280;
+    margin-bottom:14px;
+  }
+</style>
+
+<div class="reports-wrap container">
+  <h2 class="section-title">📊 Panel de Reportes</h2>
+  <p class="section-sub">Resumen visual y tablas rápidas con los principales indicadores del sistema.</p>
+
+  <!-- TARJETAS DE MÉTRICAS -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <span class="metric-label">Total de Préstamos</span>
+      <span class="metric-value">{{ total_prestamos }}</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Usuarios Registrados</span>
+      <span class="metric-value">{{ usuarios_activos }}</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Libros (Top Prestados)</span>
+      <span class="metric-value">{{ top_prestados|length }}</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Libros (Top Reservados)</span>
+      <span class="metric-value">{{ top_reservados|length }}</span>
+    </div>
+  </div>
+
+  <!-- LISTAS TOP Y GRÁFICO -->
+  <div class="top-lists">
+    <div class="top-list">
+      <h4>🏆 Top 5 - Libros más Prestados</h4>
+      <ul>
+        {% for libro in top_prestados %}
+          <li>
+            <span>{{ libro.libro__titulo }}</span>
+            <span class="top-count">{{ libro.total }}</span>
+          </li>
+        {% empty %}
+          <li>No hay registros de préstamos.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="top-list">
+      <h4>📚 Top 5 - Libros más Reservados</h4>
+      <ul>
+        {% for libro in top_reservados %}
+          <li>
+            <span>{{ libro.libro__titulo }}</span>
+            <span class="top-count">{{ libro.total }}</span>
+          </li>
+        {% empty %}
+          <li>No hay registros de reservas.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- GRÁFICO DE BARRAS -->

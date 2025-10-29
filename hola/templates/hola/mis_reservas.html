@@ -1,47 +1,200 @@
-
-
 {% block content %}
-<h2 style="text-align:center; margin-bottom:20px;">Formulario de Reserva</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Reservas - Biblioteca</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <style>
+    body { 
+      font-family:'Poppins',sans-serif;
+      margin:0; padding:0;
+      min-height:100vh;
+      color:#fff;
+      background: radial-gradient(circle at top left, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: fondoGradiente 12s ease infinite;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
 
-{% if messages %}
-  {% for message in messages %}
-    <p style="color: green; font-weight: bold; text-align:center;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+    @keyframes fondoGradiente {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
 
-<form method="POST" action="{% url 'reservas' %}" style="max-width:500px; margin:0 auto 40px auto; background:#f9f9f9; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-  {% csrf_token %}
-  {{ form.as_p }}
+    .glass-container {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      width: 95%;
+      max-width: 900px;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
 
-  <button type="submit" style="display:block; margin:20px auto; padding:12px 28px; background:#007bff; color:white; text-align:center; border:none; border-radius:8px; font-weight:bold;">
-    Crear Reserva
-  </button>
-</form>
+    h2 {
+      text-align:center;
+      margin-bottom:25px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      color:#fff;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    }
 
-<h2 style="text-align:center; margin-bottom:20px;">Mis Reservas</h2>
+    .form-reserva {
+      max-width:500px;
+      margin: 0 auto 40px auto;
+      padding: 25px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
 
-{% if reservas %}
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-    {% for reserva in reservas %}
-      <div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-        <h3>{{ reserva.libro.titulo }}</h3>
-        <p><strong>Fecha de Inicio:</strong> {{ reserva.fecha_inicio }}</p>
-        <p><strong>Fecha de Fin:</strong> {{ reserva.fecha_fin }}</p>
-        <p><strong>Estado:</strong> {{ reserva.get_estado_display }}</p>
-        {% if reserva.estado == "activo" %}
-          <p style="color: green; font-weight: bold;">¡Tu reserva está disponible para recoger!</p>
-        {% elif reserva.estado == "pendiente" %}
-          <p style="color: orange; font-weight: bold;">Pendiente: aún no puedes recoger el libro</p>
-        {% endif %}
-      </div>
+    .form-reserva button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 28px;
+      background: linear-gradient(135deg,#ff416c,#ff4b2b);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      width: 180px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .form-reserva button:hover {
+      transform: translateY(-3px);
+      box-shadow:0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .mensaje {
+      text-align:center;
+      font-weight:bold;
+      padding:10px;
+      border-radius:8px;
+      margin-bottom:15px;
+      color:#fff;
+    }
+    .mensaje.success { background-color: rgba(40,167,69,0.8); }
+    .mensaje.warning { background-color: rgba(255,193,7,0.8); }
+
+    .reservas-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+      gap:20px;
+    }
+
+    .reserva-card {
+      background: rgba(255,255,255,0.15);
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .reserva-card:hover {
+      transform: translateY(-5px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .reserva-card h3 { margin-bottom:10px; color:#fff; text-shadow:1px 1px 5px rgba(0,0,0,0.3);}
+    .reserva-card p { margin:5px 0; color:#fff; }
+
+    .estado-activo { color: #28a745; font-weight:bold; }
+    .estado-pendiente { color: #ff9800; font-weight:bold; }
+
+    .btn-limpiar {
+      background-color:#ff416c;
+      display:block;
+      margin:30px auto;
+      padding:12px 30px;
+      color:white;
+      text-align:center;
+      border-radius:8px;
+      font-weight:bold;
+      width:230px;
+      transition:0.3s;
+      cursor:pointer;
+    }
+    .btn-limpiar:hover { background: #ff4b2b; }
+
+    .volver-btn {
+      display:block;
+      margin:30px auto;
+      padding:12px 28px;
+      background: linear-gradient(135deg,#00d9ff,#00ffa3);
+      color:white;
+      text-align:center;
+      border-radius:8px;
+      font-weight:bold;
+      width:180px;
+      transition:0.3s;
+      text-decoration:none;
+    }
+    .volver-btn:hover { background: linear-gradient(135deg,#00aacc,#00ff88); }
+
+  </style>
+</head>
+<body>
+
+<div class="glass-container">
+  <h2>Formulario de Reserva</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="mensaje success">{{ message }}</div>
     {% endfor %}
-  </div>
-{% else %}
-  <p style="text-align:center;">No tienes reservas activas.</p>
-{% endif %}
+  {% endif %}
 
-<a href="{% url 'principal' %}" style="display:block; margin:30px auto; padding:12px 28px; background:#007bff; color:white; text-align:center; text-decoration:none; border-radius:8px; font-weight:bold; width:200px;">
-  Volver al Inicio
-</a>
+  <form method="POST" action="{% url 'reservas' %}" class="form-reserva">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Crear Reserva</button>
+  </form>
 
+  <h2>Mis Reservas</h2>
+
+  {% if reservas %}
+    <div class="reservas-grid">
+      {% for reserva in reservas %}
+        <div class="reserva-card">
+          <h3>{{ reserva.libro.titulo }}</h3>
+          <p><strong>Fecha de Inicio:</strong> {{ reserva.fecha_inicio }}</p>
+          <p><strong>Fecha de Fin:</strong> {{ reserva.fecha_fin }}</p>
+          <p><strong>Estado:</strong> {{ reserva.get_estado_display }}</p>
+          {% if reserva.estado == "activo" %}
+            <p class="estado-activo">¡Tu reserva está disponible para recoger!</p>
+          {% elif reserva.estado == "pendiente" %}
+            <p class="estado-pendiente">Pendiente: aún no puedes recoger el libro</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="text-align:center;">No tienes reservas activas.</p>
+  {% endif %}
+
+  <a href="{% url 'principal' %}" class="volver-btn">Volver al Inicio</a>
+
+  <form method="post" action="{% url 'limpiar_todas_reservas' %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn-limpiar"
+            onclick="return confirm('¿Está seguro que desea limpiar todas las reservas?');">
+      Limpiar Todas
+    </button>
+  </form>
+</div>
+
+</body>
+</html>
 {% endblock %}

@@ -1,117 +1,188 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Préstamos</title>
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            margin: 0;
-            padding: 20px;
+            font-family:'Poppins', sans-serif;
+            margin:0; padding:0;
+            min-height:100vh;
+            color:#fff;
+            background: radial-gradient(circle at top left, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size:400% 400%;
+            animation:fondoGradiente 12s ease infinite;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
         }
+
+        @keyframes fondoGradiente {
+            0% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
+            100% { background-position:0% 50%; }
+        }
+
         h1 {
-            text-align: center;
-            color: #34495e;
+            text-align:center;
+            font-size:2.8rem;
+            margin-top:40px;
+            margin-bottom:20px;
+            text-shadow:0 0 10px #00d9ff;
         }
+
+        .contenedor {
+            max-width:1000px;
+            width:90%;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(13px);
+            border-radius:20px;
+            padding:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.6);
+        }
+
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+            background:rgba(0,0,0,0.25);
+            border-radius:10px;
+            overflow:hidden;
+            text-align:center;
         }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-        }
+
         th {
-            background: #1abc9c;
-            color: white;
+            background:#00d9ff;
+            color:#000;
+            font-weight:bold;
+            font-size:1.1rem;
+            padding:14px;
+            text-shadow:0 0 4px #fff;
         }
-        tr:nth-child(even) {
-            background: #f2f2f2;
+
+        td {
+            padding:12px;
+            background:rgba(255,255,255,0.1);
         }
-        .btn-regresar, .btn-devolver {
-            display: inline-block;
-            margin: 5px 0;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            cursor: pointer;
+
+        tr:nth-child(even) td {
+            background:rgba(255,255,255,0.07);
         }
-        .btn-regresar {
-            background: #3498db;
-        }
-        .btn-regresar:hover {
-            background: #2980b9;
-        }
-        .btn-devolver {
-            background: #e67e22;
-        }
-        .btn-devolver:hover {
-            background: #d35400;
-        }
+
         .estado {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            color: white;
+            padding:6px 14px;
+            border-radius:25px;
+            font-weight:bold;
+            font-size:0.9rem;
+            color:#fff;
         }
-        .Pendiente { background: #f39c12; }
-        .Activo { background: #27ae60; }
-        .Devuelto { background: #95a5a6; }
+
+        .Pendiente { background:#f39c12; }
+        .Activo { background:#27ae60; }
+        .Devuelto { background:#95a5a6; }
+
+        .btn-devolver, .btn-volver {
+            display:inline-block;
+            padding:10px 22px;
+            border-radius:30px;
+            font-weight:700;
+            text-decoration:none;
+            transition:0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.4);
+            text-align:center;
+        }
+
+        .btn-devolver {
+            background:linear-gradient(135deg,#e67e22,#d35400);
+            color:#fff;
+        }
+
+        .btn-devolver:hover {
+            transform:translateY(-3px);
+            box-shadow:0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        .btn-volver {
+            background:linear-gradient(135deg,#ff416c,#ff4b2b);
+            color:#fff;
+            margin-top:25px;
+        }
+
+        .btn-volver:hover {
+            transform:translateY(-4px);
+            box-shadow:0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        footer {
+            margin-top:auto;
+            padding:20px;
+            width:100%;
+            background:rgba(255,255,255,0.1);
+            backdrop-filter:blur(10px);
+            text-align:center;
+            font-size:0.9rem;
+            color:#d4e8ff;
+            border-top-left-radius:15px;
+            border-top-right-radius:15px;
+            box-shadow:0 -4px 20px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
+
 <body>
-    <h1>Lista de Préstamos</h1>
 
-    {% if prestamos %}
-    <table>
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Libro</th>
-                <th>Fecha de Préstamo</th>
-                <th>Fecha de Devolución</th>
-                <th>Estado</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for prestamo in prestamos %}
-            <tr>
-                <td>{{ prestamo.usuario.nombre }}</td>
-                <td>{{ prestamo.libro.titulo }}</td>
-                <td>{{ prestamo.fecha_prestamo }}</td>
-                <td>{{ prestamo.fecha_devolucion|default:"-" }}</td>
-                <td>
-                    {% if prestamo.devuelto %}
-                        <span class="estado Devuelto">Devuelto</span>
-                    {% else %}
-                        <span class="estado Activo">Activo</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if not prestamo.devuelto %}
-                        <a href="{% url 'devolver_prestamo' prestamo.pk %}" class="btn-devolver">Devolver</a>
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>No hay préstamos registrados.</p>
-    {% endif %}
+    <h1>📋 Lista de Préstamos</h1>
 
-    <a href="{% url 'principal' %}" class="btn-regresar">Regresar a la Página Principal</a>
+    <div class="contenedor">
+        {% if prestamos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha de Préstamo</th>
+                    <th>Fecha de Devolución</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prestamo in prestamos %}
+                <tr>
+                    <td>{{ prestamo.usuario.nombre }}</td>
+                    <td>{{ prestamo.libro.titulo }}</td>
+                    <td>{{ prestamo.fecha_prestamo }}</td>
+                    <td>{{ prestamo.fecha_devolucion|default:"-" }}</td>
+                    <td>
+                        {% if prestamo.devuelto %}
+                            <span class="estado Devuelto">Devuelto</span>
+                        {% else %}
+                            <span class="estado Activo">Activo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not prestamo.devuelto %}
+                            <a href="{% url 'devolver_prestamo' prestamo.pk %}" class="btn-devolver">Devolver</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p style="text-align:center;">No hay préstamos registrados.</p>
+        {% endif %}
+
+        <a href="{% url 'principal' %}" class="btn-volver">🏠 Volver al Inicio</a>
+    </div>
+
+    <footer>
+        &copy; 2025 Biblioteca Digital — Gestión Moderna de Préstamos 📘
+    </footer>
+
 </body>
 </html>

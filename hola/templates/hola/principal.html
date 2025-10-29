@@ -24,15 +24,18 @@
     z-index: -1;
   }
 
+  /* 🔹 Menú Superior *
+  
+
   /* 🔹 Título de bienvenida */
   .welcome-text {
-    color: #ffc107; /* amarillo */
+    color: #ffc107;
     font-weight: 700;
     font-size: 2rem;
     text-align: center;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-    margin-top: 0px; /* pegado al top */
-    margin-bottom: 20px; /* espacio mínimo antes de las cards */
+    margin-top: 0px;
+    margin-bottom: 20px;
   }
 
   /* 🔹 Cards principales */
@@ -47,6 +50,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
   .card i {
@@ -83,10 +88,16 @@
 
   /* 🔹 Contenedor principal */
   .content {
-    padding-top: 0px; /* sin espacio superior */
-    padding-bottom: 40px;
+    padding-top: 0px;
+    padding-bottom: 60px; /* espacio para footer */
   }
+
+
+
 </style>
+
+
+
 
 <div class="container content">
   <!-- 🔹 Texto de bienvenida -->
@@ -98,7 +109,7 @@
     {% if user.is_superuser %}
     <div class="col-md-3">
       <a href="{% url 'inventario_sgb' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-boxes"></i>
           <h5>Inventario</h5>
           <p>Ver todos los libros y disponibilidad</p>
@@ -109,7 +120,7 @@
 
     <div class="col-md-3">
       <a href="{% url 'libros' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-book"></i>
           <h5>Libros</h5>
           <p>Gestiona los libros de la biblioteca</p>
@@ -119,7 +130,7 @@
 
     <div class="col-md-3">
       <a href="{% url 'prestamos' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-handshake"></i>
           <h5>Préstamos</h5>
           <p>Controla préstamos y devoluciones</p>
@@ -129,7 +140,7 @@
 
     <div class="col-md-3">
       <a href="{% url 'reservas' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-calendar-check"></i>
           <h5>Reservas</h5>
           <p>Administra reservas de libros</p>
@@ -139,7 +150,7 @@
 
     <div class="col-md-3">
       <a href="{% url 'estadisticas' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-chart-bar"></i>
           <h5>Estadísticas</h5>
           <p>Visualiza reportes y gráficos</p>
@@ -147,9 +158,30 @@
       </a>
     </div>
 
+    <!-- 🔹 NUEVAS CARDS DE GALERÍA -->
+    <div class="col-md-3">
+      <a href="{% url 'galerialibro' %}" class="card-link">
+        <div class="card p-4">
+          <i class="fas fa-book-open"></i>
+          <h5>Galería Libro</h5>
+          <p>Explora la colección de libros</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'escritores' %}" class="card-link">
+        <div class="card p-4">
+          <i class="fas fa-feather-alt"></i>
+          <h5>Galería Escritores</h5>
+          <p>Conoce nuestros autores destacados</p>
+        </div>
+      </a>
+    </div>
+
     <div class="col-md-3">
       <a href="{% url 'contacto' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-envelope"></i>
           <h5>Contacto</h5>
           <p>Redes sociales y más información</p>
@@ -159,7 +191,7 @@
 
     <div class="col-md-3">
       <a href="{% url 'acerca' %}" class="card-link">
-        <div class="card p-4 text-center">
+        <div class="card p-4">
           <i class="fas fa-info-circle"></i>
           <h5>Acerca de Nosotros</h5>
           <p>Conoce nuestra misión y visión</p>
@@ -168,4 +200,7 @@
     </div>
   </div>
 </div>
+
+
+
 {% endblock %}

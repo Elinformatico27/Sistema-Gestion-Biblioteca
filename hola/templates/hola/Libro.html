@@ -7,11 +7,10 @@
     <title>Libros</title>
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
     <style>
-        
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url("http://tuservidor.com/fondo.jpg") no-repeat center center fixed;
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -19,31 +18,26 @@
             min-height: 100vh;
             padding-top: 40px;
             color: #333;
-            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
         }
         .container {
-           background: rgba(255, 255, 255, 0.9); 
+            background: rgba(255, 255, 255, 0.9);
             width: 95%;
             max-width: 900px;
             padding: 25px;
             border-radius: 15px;
-            
         }
         h1, h2 {
             text-align: center;
             color: #2c3e50;
-    
         }
         form {
             margin-bottom: 25px;
-            font-size:20px; /* Aumenta el tamaño base */
+            font-size: 20px;
         }
-           option {
-                    font-size: 20px;
-                     padding: 5px;
-           }
-
-        /* Formulario horizontal */
+        option {
+            font-size: 20px;
+            padding: 5px;
+        }
         .form-horizontal .form-row {
             display: flex;
             flex-wrap: wrap;
@@ -51,7 +45,7 @@
             justify-content: space-between;
         }
         .form-horizontal .form-group {
-            flex: 1 1 45%;
+            flex: 1 1 30%;
             min-width: 180px;
             display: flex;
             flex-direction: column;
@@ -60,11 +54,20 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"], input[type="number"], input[type="date"], select {
+        select, input[type="text"] {
             padding: 12px;
             border-radius: 10px;
             border: 1px solid #ccc;
             font-size: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            height: 48px;
+            appearance: auto; /* flechita nativa */
+            -moz-appearance: auto;
+            -webkit-appearance: auto;
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px 16px;
         }
         button {
             display: block;
@@ -108,31 +111,6 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        .error {
-            color: red;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        
-  .lista-libros {
-       font-size: 18px;
-       line-height: 1.5;   /* Aumenta tamaño de letra */
-        /* Espaciado entre líneas para que se vea más claro */
-  }
-
-  .lista-libros li {
-      margin-bottom: 12px; /* Espacio entre libros */
-  }
-
-  .lista-libros strong {
-       font-size: 20px;  /* El título un poco más grande */
-  }
-
-  .lista-libros small {
-        font-size: 16px;   /* Autor, categoría y estado un poco más pequeños */
-      
-  }
     </style>
 
     <!-- Select2 CSS -->
@@ -144,7 +122,6 @@
     <h1>📚 Libros</h1>
 
     {% if es_admin %}
-    <!-- Formulario agregar libro solo para admin/bibliotecario -->
     <form method="POST" class="form-horizontal">
         {% csrf_token %}
         <div class="form-row">
@@ -162,14 +139,25 @@
     </form>
     {% endif %}
 
-    <!-- Formulario búsqueda siempre visible -->
     <h2>Buscar libros:</h2>
     <form method="get" class="form-horizontal">
         <div class="form-row">
             {% for field in buscar_form %}
                 <div class="form-group">
                     {{ field.label_tag }}
-                    {{ field }}
+                    {% if field.name == "titulo" %}
+                        <!-- Placeholder "Todos los títulos" -->
+                        <select name="{{ field.name }}" id="{{ field.id_for_label }}">
+                            <option value="">— Todos los títulos —</option>
+                            {% for libro in libros %}
+                                <option value="{{ libro.id }}" {% if field.value == libro.id %}selected{% endif %}>
+                                    {{ libro.titulo }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
                     {% if field.errors %}
                         <div class="error">{{ field.errors }}</div>
                     {% endif %}
@@ -179,35 +167,23 @@
         <button type="submit">Buscar</button>
     </form>
 
+    <h2 style="font-size:28px;">Lista de libros</h2>
+    <ul style="font-size:24px; line-height:1.8;">
+        {% for libro in libros %}
+            <li style="margin-bottom:15px;">
+                <strong style="font-size:26px;">{{ libro.titulo }}</strong><br>
+                <span style="font-size:22px;">
+                    {{ libro.autor.nombre }} | 
+                    {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
+                    {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
+                    <span>{{ libro.estado_real }}</span>
+                </span>
+            </li>
+        {% empty %}
+            <li>No hay libros registrados.</li>
+        {% endfor %}
+    </ul>
 
-
-   <!-- Lista de libros -->
-<h2 style="font-size:28px;">Lista de libros</h2>
-
-<ul style="font-size:24px; line-height:1.8;">
-    {% for libro in libros %}
-        <li style="margin-bottom:15px;">
-            <strong style="font-size:26px;">{{ libro.titulo }}</strong><br>
-            <span style="font-size:22px;">
-                {{ libro.autor.nombre }} | 
-                {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
-                {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
-                
-                <span>{{ libro.estado_real }}</span>
-
-
-                    
-                        
-
-            </span>
-        </li>
-    {% empty %}
-        <li>No hay libros registrados.</li>
-    {% endfor %}
-</ul>
-
-
-    <!-- Volver -->
     <a href="{% url 'principal' %}" class="back-link">⬅ Volver a Principal</a>
 </div>
 
@@ -217,9 +193,13 @@
 
 <script>
 $(document).ready(function() {
-    if ($('#id_autor').length) {
-        $('#id_autor').select2({ dropdownParent: $('body') });
-    }
+    // Aplica Select2 a todos los selects
+    $('select').each(function(){
+        if ($(this).length) {
+            $(this).select2({ dropdownParent: $('body') });
+            $(this).next('.select2-container').find('.select2-selection').css('height','48px');
+        }
+    });
 });
 </script>
 
