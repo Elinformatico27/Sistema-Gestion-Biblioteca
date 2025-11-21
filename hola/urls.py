@@ -22,6 +22,7 @@ urlpatterns = [
     # Libros
     # ----------------------
     path('libros/', views.libros_view, name='libros'),
+    
 
     # ----------------------
     # Préstamos
@@ -51,29 +52,48 @@ urlpatterns = [
     # ----------------------
     path('registro/', views.registro, name='registro'),
     path('usuario/formulario/', views.usuario_formulario, name='usuario_formulario'),
+    
+   
+    path('prestar/<int:libro_id>/', views.prestar_libro, name='prestar_libro'),
+    path('reservar/<int:libro_id>/', views.reservar_libro, name='reservar_libro'),
+    # otras rutas...
+    path('prestamo/<int:libro_id>/', views.formulario_prestamo, name='formulario_prestamo'),
+    path('reserva/<int:libro_id>/', views.formulario_reserva, name='formulario_reserva'),
+
+      
+
 
     # ----------------------
     # Estadísticas y extras
-    # ----------------------
     path('estadisticas/', views.estadisticas, name='estadisticas'),
     path('generar_multas/', views.generar_multas, name='generar_multas'),
     path('contacto/', views.contacto, name='contacto'),
     path('galerialibro/', views.galerialibro, name='galerialibro'),
-    path('escritores/', views.escritores, name='escritores'),
+    path("escritores/", views.escritores, name="escritores"),
+    path("escritores/<slug:slug>/", views.detalle_escritor, name="detalle_escritor"),
+    
+
     path('redessociales/', views.redessociales, name='redessociales'),
     path('acercanosotros/', views.acerca, name='acerca'),
-    path('libro/devolver/<int:libro_id>/', views.devolver_libro, name='devolver_libro'),
+    path('devolver/<int:libro_id>/', views.devolver_libro, name='devolver_libro'),
     path('sitemap/', views.sitemap_html, name='sitemap'),
+    # URL para actualizar inventario
+    path('inventario/actualizar/', views. actualizar_inventario_y_estadisticas, name='actualizar_inventario'),
+    path('multas/', views.listar_multas_notificacion, name='listar_multas_notificacion'),
+    
 
 
-
-
+   
     path('sandia/', views.imagen, name='imagen'),
     path('enviar-notificacion-multa/<int:multa_id>/', views.enviar_notificacion_multa, name='enviar_notificacion_multa'),
 
    # path('enviar-multa-prueba/', views.enviar_notificacion_multa, name='enviar_notificacion_multa'),
     path('', views.home, name='home'),   # raíz
+    # URL para actualizar inventario
     
+
+
+
  
 
 ]

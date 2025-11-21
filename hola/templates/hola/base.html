@@ -8,34 +8,51 @@
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
   <style>
+    /* ================== LAYOUT PARA FOOTER FIJO ================== */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1;
+    }
+
     /* ================== NAVBAR ================== */
     .navbar-custom {
       background-color: #ff8000;
       color: white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
+
     .navbar-custom .navbar-brand {
       color: white;
       font-weight: 700;
       font-size: 1.8rem;
     }
+
     .navbar-custom .nav-link {
       color: white;
       margin-right: 15px;
       font-weight: 500;
       font-size: 1.1rem;
-      transition: all 0.3s ease;
+      transition: 0.3s;
     }
+
     .navbar-custom .nav-link:hover {
       color: #ffe082;
       transform: scale(1.1);
     }
 
-    /* Avatar circular */
+    /* Avatar */
     .avatar {
       width: 45px;
       height: 45px;
@@ -45,171 +62,96 @@
       border: 2px solid white;
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    /* Flecha del dropdown del perfil */
-    .navbar .dropdown-toggle::after {
-      font-size: 1.5rem;       /* más grande */
-      font-weight: 900;        /* negrita */
-      color: aqua
-      margin-left: 10px;
-    }
-    .navbar .dropdown-toggle:hover::after {
-      transform: scale(1.3);
-      transition: transform 0.2s ease;
-    }
-
-    /* ================== TARJETAS INICIO ================== */
-    .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 30px;
-      gap: 25px;
-    }
-    .card-uniforme {
-      background: linear-gradient(145deg, #007bff, #0056b3);
-      color: white;
-      width: 260px;
-      height: 260px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 18px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    .card-uniforme:hover {
-      transform: scale(1.06);
-      background: linear-gradient(145deg, #0056b3, #004085);
-    }
-    .card-uniforme i {
-      font-size: 3.5rem;
-      margin-bottom: 15px;
-    }
-    .card-uniforme h4 {
-      font-weight: 600;
-      font-size: 1.4rem;
-      margin: 0;
-    }
-
     /* ================== FOOTER ================== */
     footer {
       text-align: center;
       color: white;
       background-color: #ff8000;
-      padding: 1px 0;
-      margin-top: 20px;
+      padding: 8px 0;
       font-size: 0.9rem;
-    }
-    p {
-      color:white;
-      font-size: 20px;
+      margin-top: auto;
+      width: 100%;
     }
   </style>
 </head>
 
 <body>
+
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'principal' %}">
-        <i class="fa-solid fa-book-open"></i> Biblioteca
-      </a>
+      <a class="navbar-brand" href="{% url 'principal' %}">Biblioteca</a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
+
         {% if user.is_authenticated %}
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'libros' %}"><i class="fa-solid fa-book"></i> Libros</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'prestamos' %}"><i class="fa-solid fa-handshake"></i> Préstamos</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'reservas' %}"><i class="fa-solid fa-calendar-check"></i> Reservas</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'estadisticas' %}"><i class="fa-solid fa-chart-bar"></i> Reportes</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'libros' %}">Libros</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'prestamos' %}">Préstamos</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'reservas' %}">Reservas</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'estadisticas' %}">Reportes</a></li>
 
           {% if user.is_superuser %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'inventario_sgb' %}"><i class="fa-solid fa-boxes-stacked"></i> Inventario</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'inventario_sgb' %}">Inventario</a></li>
           {% endif %}
 
-          <li class="nav-item"><a class="nav-link" href="{% url 'acerca' %}"><i class="fa-solid fa-users"></i> Acerca de Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'contacto' %}"><i class="fa-solid fa-envelope"></i> Contacto</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'galerialibro' %}"><i class="fa-solid fa-book-atlas"></i> Galería Libro</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'escritores' %}"><i class="fa-solid fa-feather"></i> Galería Escritores</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'acerca' %}">Acerca</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contacto' %}">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'galerialibro' %}">Galería Libro</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'escritores' %}">Galería Escritores</a></li>
         </ul>
 
+        <!-- PERFIL -->
         <ul class="navbar-nav ms-auto">
           <li class="nav-item dropdown d-flex align-items-center">
+
             {% if user.perfil.avatar %}
-              <img src="{{ user.perfil.avatar.url }}" class="avatar" alt="Avatar de {{ user.username }}">
+              <img src="{{ user.perfil.avatar.url }}" class="avatar" alt="Avatar">
             {% else %}
-              <img src="{% static 'img/avatar_vacio.png' %}" class="avatar" alt="Sin foto">
+              <img src="{% static 'img/avatar_vacio.png' %}" class="avatar" alt="Avatar">
             {% endif %}
+
             <a class="nav-link dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown">
               {{ user.username }}
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+
+            <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="{% url 'perfil_usuario' %}">Perfil</a></li>
               <li><a class="dropdown-item" href="{% url 'editar_perfil' %}">Editar Foto</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
             </ul>
+
           </li>
         </ul>
 
         {% else %}
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
         </ul>
         {% endif %}
+
       </div>
     </div>
   </nav>
 
   <!-- CONTENIDO -->
-  <div class="container mt-4">
-    {% block content %}
-    <div class="card-container">
-      <div class="card-uniforme">
-        <i class="fa-solid fa-book"></i>
-        <h4>Libros</h4>
-      </div>
-      <div class="card-uniforme">
-        <i class="fa-solid fa-handshake"></i>
-        <h4>Préstamos</h4>
-      </div>
-      <div class="card-uniforme">
-        <i class="fa-solid fa-calendar-check"></i>
-        <h4>Reservas</h4>
-      </div>
-      <div class="card-uniforme">
-        <i class="fa-solid fa-chart-bar"></i>
-        <h4>Reportes</h4>
-      </div>
-      <div class="card-uniforme">
-        <i class="fa-solid fa-users"></i>
-        <h4>Acerca de Nosotros</h4>
-      </div>
-    </div>
-    {% endblock %}
-  </div>
+  <main class="container mt-4">
+      {% block content %}
+      {% endblock %}
+  </main>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 Sistema de Gestión de Biblioteca</p>
+      <p>© 2025 Biblioteca Digital</p>
   </footer>
 
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

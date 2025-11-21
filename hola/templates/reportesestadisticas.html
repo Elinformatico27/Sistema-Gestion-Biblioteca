@@ -5,13 +5,13 @@
 
 {% block content %}
 <style>
-  /* Contenedor general */
+  /* ===================== Contenedor general ===================== */
   .reports-wrap {
     margin-top: 24px;
     margin-bottom: 40px;
   }
 
-  /* Tarjetas de métricas */
+  /* ===================== Tarjetas de métricas ===================== */
   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -26,10 +26,12 @@
     transition: transform .18s ease, box-shadow .18s ease;
     text-align: center;
   }
+
   .metric-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 14px 30px rgba(15,32,39,0.09);
   }
+
   .metric-label {
     display:block;
     font-size:0.95rem;
@@ -37,44 +39,40 @@
     margin-bottom:8px;
     font-weight:600;
   }
+
   .metric-value {
     font-size:2rem;
     color:#0f1724;
     font-weight:800;
   }
 
-  /* Tarjeta de gráfico */
-  .chart-card {
-    margin-top: 22px;
-    background: linear-gradient(180deg,#ffffff,#f7fbff);
-    border-radius: 14px;
-    padding: 18px;
-    box-shadow: 0 8px 20px rgba(15,32,39,0.06);
-  }
-
-  /* Lista Top */
+  /* ===================== Listas Top ===================== */
   .top-lists {
     margin-top: 22px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
   }
+
   .top-list {
     background: #ffffff;
     border-radius: 10px;
     padding: 14px;
     box-shadow: 0 6px 14px rgba(15,32,39,0.04);
   }
+
   .top-list h4 {
     margin-bottom:12px;
     font-size:1rem;
     color:#0f1724;
   }
+
   .top-list ul {
     list-style: none;
     padding:0;
     margin:0;
   }
+
   .top-list li {
     padding:10px 8px;
     border-radius:8px;
@@ -85,34 +83,29 @@
     background: linear-gradient(90deg, rgba(255,255,255,1), rgba(250,250,252,1));
     border-left: 6px solid transparent;
   }
+
   .top-list li:nth-child(odd) { background:#fbfcff; }
   .top-count {
     font-weight:700;
     color:#111827;
   }
 
-  /* Pie de página dentro del contenido */
-  .small-note {
-    color:#6b7280;
-    font-size:0.92rem;
-    margin-top:10px;
-  }
-
-  /* Responsive adjustments */
-  @media (max-width: 720px) {
-    .top-lists { grid-template-columns: 1fr; }
-  }
-
-  /* Estética general (no rompe base) */
+  /* ===================== Estética general ===================== */
   h2.section-title {
     font-size:1.4rem;
     color:#0f1724;
     margin-bottom:6px;
     font-weight:700;
   }
+
   p.section-sub {
     color:#6b7280;
     margin-bottom:14px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 720px) {
+    .top-lists { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -120,11 +113,16 @@
   <h2 class="section-title">📊 Panel de Reportes</h2>
   <p class="section-sub">Resumen visual y tablas rápidas con los principales indicadores del sistema.</p>
 
-  <!-- TARJETAS DE MÉTRICAS -->
+  <!-- ===================== TARJETAS DE MÉTRICAS ===================== -->
   <div class="metrics-grid">
     <div class="metric-card">
       <span class="metric-label">Total de Préstamos</span>
       <span class="metric-value">{{ total_prestamos }}</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Total de Reservas</span>
+      <span class="metric-value">{{ total_reservas }}</span>
     </div>
 
     <div class="metric-card">
@@ -143,8 +141,9 @@
     </div>
   </div>
 
-  <!-- LISTAS TOP Y GRÁFICO -->
+  <!-- ===================== LISTAS TOP ===================== -->
   <div class="top-lists">
+    <!-- Top Prestados -->
     <div class="top-list">
       <h4>🏆 Top 5 - Libros más Prestados</h4>
       <ul>
@@ -159,6 +158,7 @@
       </ul>
     </div>
 
+    <!-- Top Reservados -->
     <div class="top-list">
       <h4>📚 Top 5 - Libros más Reservados</h4>
       <ul>
@@ -174,4 +174,42 @@
     </div>
   </div>
 
-  <!-- GRÁFICO DE BARRAS -->
+  <!-- ===================== GRÁFICO DE BARRAS (Opcional) ===================== -->
+  <div class="chart-card">
+    <canvas id="prestamosChart"></canvas>
+  </div>
+</div>
+
+<!-- ===================== Script para gráfico con Chart.js ===================== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('prestamosChart').getContext('2d');
+  const data = {
+    labels: [{% for dia in prestamos_por_dia %}'{{ dia.dia }}',{% endfor %}],
+    datasets: [{
+      label: 'Préstamos por día',
+      data: [{% for dia in prestamos_por_dia %}{{ dia.total }},{% endfor %}],
+      backgroundColor: 'rgba(54, 162, 235, 0.6)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  };
+  const prestamosChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Préstamos diarios'
+        }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+{% endblock %}

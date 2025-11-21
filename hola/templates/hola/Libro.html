@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,98 +25,43 @@
             padding: 25px;
             border-radius: 15px;
         }
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        form {
-            margin-bottom: 25px;
-            font-size: 20px;
-        }
-        option {
-            font-size: 20px;
-            padding: 5px;
-        }
+        h1, h2 { text-align: center; color: #2c3e50; }
+        form { margin-bottom: 25px; font-size: 18px; }
         .form-horizontal .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;
         }
         .form-horizontal .form-group {
-            flex: 1 1 30%;
-            min-width: 180px;
-            display: flex;
-            flex-direction: column;
+            flex: 1 1 30%; min-width: 180px; display: flex; flex-direction: column;
         }
-        .form-horizontal label {
-            margin-bottom: 5px;
-            font-weight: bold;
+        input, select {
+            height: 48px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc; padding: 0 10px;
         }
-        select, input[type="text"] {
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            width: 100%;
-            box-sizing: border-box;
-            height: 48px;
-            appearance: auto; /* flechita nativa */
-            -moz-appearance: auto;
-            -webkit-appearance: auto;
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px 16px;
+        .guardar-btn {
+            background: #28a745; color: white; font-size: 22px; font-weight: bold;
+            border: none; border-radius: 12px; width: 100%; padding: 16px 0; cursor: pointer;
+            margin-top: 15px; transition: 0.3s; display: block;
         }
-        button {
-            display: block;
-            margin: 15px auto 0 auto;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: linear-gradient(135deg, #45a049, #3e8e41);
-            transform: scale(1.05);
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 15px;
-        }
-        li {
-            background-color: #f9f9f9;
-            margin-bottom: 8px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            border: 1px solid #eee;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        .guardar-btn:hover { background: #FF8C00; }
+        .buscar-form { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .buscar-form input { width: 200px; height: 48px; font-size: 16px; border-radius: 10px; border: 1px solid #aaa; padding: 0 10px; }
+        .buscar-btn { height: 48px; padding: 0 18px; font-size: 18px; font-weight: bold; background: #4CAF50; border-radius: 8px; cursor: pointer; color: #fff; border: none; }
+        .buscar-btn:hover { background: #FF8C00; }
+        ul { list-style: none; padding: 0; margin-top: 15px; }
+        li { background-color: #f9f9f9; margin-bottom: 12px; padding: 15px; border-radius: 10px; font-size: 17px; border: 1px solid #eee; }
+        li strong { font-size: 22px; }
+        li span { font-size: 18px; }
+        .estado-disponible { color: green; font-weight: bold; }
+        .estado-no { color: red; font-weight: bold; }
+        .back-link { display: block; text-align: center; margin-top: 20px; font-weight: bold; font-size: 30px; text-decoration: none; color: #4CAF50; }
+        .back-link:hover { text-decoration: underline; }
+        .error { color: red; font-size: 12px; }
+        .boton-libro { padding: 10px 15px; border-radius: 8px; color: white; font-weight: bold; text-decoration: none; }
+        .prestamo-btn { background: #007bff; }
+        .reserva-btn { background: #ff9800; }
+        .mensaje-no-disponible { color: red; font-weight: bold; font-size: 16px; margin-top: 10px; }
     </style>
-
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
-
 <div class="container">
     <h1>📚 Libros</h1>
 
@@ -135,48 +79,48 @@
                 </div>
             {% endfor %}
         </div>
-        <button type="submit">Guardar</button>
+        <button type="submit" class="guardar-btn">💾 GUARDAR</button>
     </form>
     {% endif %}
 
     <h2>Buscar libros:</h2>
-    <form method="get" class="form-horizontal">
-        <div class="form-row">
-            {% for field in buscar_form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {% if field.name == "titulo" %}
-                        <!-- Placeholder "Todos los títulos" -->
-                        <select name="{{ field.name }}" id="{{ field.id_for_label }}">
-                            <option value="">— Todos los títulos —</option>
-                            {% for libro in libros %}
-                                <option value="{{ libro.id }}" {% if field.value == libro.id %}selected{% endif %}>
-                                    {{ libro.titulo }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
-                    {% if field.errors %}
-                        <div class="error">{{ field.errors }}</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-        <button type="submit">Buscar</button>
+    <form method="get" class="buscar-form">
+        <input type="text" name="titulo" placeholder="Título" value="{{ request.GET.titulo }}">
+        <input type="text" name="autor" placeholder="Autor" value="{{ request.GET.autor }}">
+        <input type="text" name="categoria" placeholder="Categoría" value="{{ request.GET.categoria }}">
+        <button type="submit" class="buscar-btn">Buscar 🔍</button>
     </form>
 
-    <h2 style="font-size:28px;">Lista de libros</h2>
-    <ul style="font-size:24px; line-height:1.8;">
+    <h2>Lista de libros</h2>
+    <ul>
         {% for libro in libros %}
-            <li style="margin-bottom:15px;">
-                <strong style="font-size:26px;">{{ libro.titulo }}</strong><br>
-                <span style="font-size:22px;">
-                    {{ libro.autor.nombre }} | 
-                    {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} | 
-                    {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
-                    <span>{{ libro.estado_real }}</span>
+            <li>
+                <strong>{{ libro.titulo }}</strong><br>
+                <p>{{ libro.descripcion }}</p>
+
+                <div style="margin-top: 10px;">
+                    <strong style="font-size: 18px; color:#2c3e50;">¿Qué desea realizar con este libro?</strong>
+                    <div style="margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap;">
+                        {% if libro.estado_real == "Disponible" %}
+                            <a href="{% url 'formulario_prestamo' libro.id %}" class="boton-libro prestamo-btn">📘 Préstamo</a>
+                            <a href="{% url 'formulario_reserva' libro.id %}" class="boton-libro reserva-btn">📗 Reserva</a>
+                        {% else %}
+                            <div class="mensaje-no-disponible">
+                                ❌ No se puede prestar ni reservar en este momento, inténtalo más tarde.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <span>
+                    📖 {{ libro.autor.nombre }} |
+                    🏷️ {% if libro.categoria %}{{ libro.categoria.nombre }}{% else %}Sin categoría{% endif %} |
+                    🏢 {% if libro.editorial %}{{ libro.editorial.nombre }}{% else %}Sin editorial{% endif %} - 
+                    {% if libro.estado_real == "Disponible" %}
+                        <span class="estado-disponible">✅ Disponible</span>
+                    {% else %}
+                        <span class="estado-no">❌ No disponible</span>
+                    {% endif %}
                 </span>
             </li>
         {% empty %}
@@ -186,22 +130,5 @@
 
     <a href="{% url 'principal' %}" class="back-link">⬅ Volver a Principal</a>
 </div>
-
-<!-- jQuery y Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    // Aplica Select2 a todos los selects
-    $('select').each(function(){
-        if ($(this).length) {
-            $(this).select2({ dropdownParent: $('body') });
-            $(this).next('.select2-container').find('.select2-selection').css('height','48px');
-        }
-    });
-});
-</script>
-
 </body>
 </html>

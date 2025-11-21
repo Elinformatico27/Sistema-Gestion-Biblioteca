@@ -2,7 +2,6 @@
 {% load static %}
 
 <style>
-/* ================== Fondo ================== */
 body {
     margin: 0;
     padding: 0;
@@ -14,64 +13,36 @@ body {
     align-items: center;
 }
 
-/* ================== Contenedor ================== */
 .container {
     width: 700px;
     margin-top: 10px;
-    margin: auto;
+    margin-bottom: 20px;
     padding: 20px;
-    border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     background-color: #fff;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
 }
 
-/* ================== Mensajes ================== */
 .mensajes {
     margin-bottom: 20px;
-    width: 100%;
 }
-
 .mensaje {
     padding: 12px 20px;
     border-radius: 8px;
     margin-bottom: 10px;
     font-weight: bold;
-    width: 100%;
-    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-.mensaje.success { background-color: #cce5ff; color: #004085; }
+.mensaje.success { background-color: #d4edda; color: #155724; }
 .mensaje.error   { background-color: #f8d7da; color: #721c24; }
-.mensaje.warning { background-color: #d4edda; color: #155724; }
+.mensaje.warning { background-color: #fff3cd; color: #856404; }
+.cerrar { cursor: pointer; font-weight: bold; font-size: 18px; margin-left: 15px; }
 
-.cerrar {
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 18px;
-    margin-left: 15px;
-}
+h2, h3 { text-align: center; margin-bottom: 20px; font-weight: 900; font-size: 2rem; color: #333; }
 
-/* ================== Títulos ================== */
-h2, h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: 900;
-    font-size: 2rem;
-    color: #333;
-}
-
-/* ================== Formularios ================== */
-label {
-    display: block;
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 6px;
-}
-
+label { display: block; font-weight: 700; font-size: 1.2rem; margin-bottom: 6px; }
 select, input[type="date"] {
     width: 100%;
     font-size: 1.1rem;
@@ -81,34 +52,37 @@ select, input[type="date"] {
     border-radius: 6px;
     box-sizing: border-box;
     margin-bottom: 15px;
+    height: 40px;
     transition: border-color 0.3s;
 }
-
-select:focus, input[type="date"]:focus {
-    border-color: #2e7d32;
-    outline: none;
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: white url("data:image/svg+xml;utf8,<svg fill='red' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 10px center;
+    background-size: 20px 20px;
+    padding-right: 40px;
 }
+select:focus, input[type="date"]:focus { border-color: #2e7d32; outline: none; }
 
-/* ================== Botones uniformes ================== */
-/* ================== Botones uniformes centrados ================== */
-.actions {
+/* ================== Botones centrados ================== */
+.actions, .admin-actions {
     display: flex;
-    justify-content: center; /* centra horizontalmente */
-    gap: 15px; /* espacio entre botones */
+    gap: 10px; /* separación entre botones */
+    justify-content: center; /* centrados horizontalmente */
     margin-top: 20px;
     margin-bottom: 30px;
 }
-
 .btn-uniform {
     display: inline-flex;
     justify-content: center;
     align-items: center;
     font-weight: 900;
     font-size: 1.1rem;
-    padding: 8px 20px; /* delgado, no muy alto */
+    padding: 8px 20px;
     border-radius: 6px;
-    width: 180px;       /* mismo ancho para todos */
-    height: 40px;       /* altura uniforme */
+    width: 140px;
+    height: 40px;
     box-sizing: border-box;
     cursor: pointer;
     text-decoration: none;
@@ -116,36 +90,13 @@ select:focus, input[type="date"]:focus {
     line-height: normal;
     text-align: center;
     transition: background-color 0.3s;
-}
-
-/* Colores */
-button.btn-uniform {
-    background-color: #4CAF50;
     border: none;
 }
+button.btn-uniform { background-color: #4CAF50; } /* Guardar verde */
+button.btn-uniform:hover { background-color: #45a049; }
+a.btn-uniform.btn-link { background-color: #dc3545; } /* Volver rojo */
+a.btn-uniform.btn-link:hover { background-color: #a71d2a; }
 
-button.btn-uniform:hover {
-    background-color: #388e3c;
-}
-
-a.btn-uniform.btn-link {
-    background-color: #f44336;
-}
-
-a.btn-uniform.btn-link:hover {
-    background-color: #d32f2f;
-}
-
-a.btn-admin, button.btn-admin {
-    background-color: #1976d2;
-}
-
-a.btn-admin:hover, button.btn-admin:hover {
-    background-color: #115293;
-}
-
-
-/* Botones admin superusuario con mismo tamaño */
 .btn-admin {
     display: inline-flex;
     justify-content: center;
@@ -158,58 +109,28 @@ a.btn-admin:hover, button.btn-admin:hover {
     box-sizing: border-box;
     cursor: pointer;
     text-decoration: none;
-    margin: 5px;
+    margin: 0;
     transition: background-color 0.3s;
     color: white;
-    text-align: center;
     line-height: normal;
+    text-align: center;
 }
-
 a.btn-admin { background-color: #1976d2; }
 a.btn-admin:hover { background-color: #115293; }
 
-/* ================== Acciones ================== */
-.actions {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-/* ================== Lista de préstamos ================== */
-hr {
-    margin: 30px 0;
-    border: none;
-    border-top: 1px solid #ddd;
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 0;
-    font-size: 1.1rem;
-}
-
-ul li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-ul li:last-child {
-    border-bottom: none;
-}
-
-.empty-message {
-    color: #777;
-    font-style: italic;
-}
+hr { margin: 30px 0; border: none; border-top: 1px solid #ddd; }
+ul { list-style-type: none; padding-left: 0; font-size: 1.1rem; }
+ul li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+ul li:last-child { border-bottom: none; }
+.empty-message { color: #777; font-style: italic; }
 </style>
 
 <div class="container">
     <h2>Nuevo Préstamo</h2>
 
     <form method="post" novalidate>
+        {% csrf_token %}
+
         {% if messages %}
         <div class="mensajes">
             {% for message in messages %}
@@ -221,7 +142,6 @@ ul li:last-child {
         </div>
         {% endif %}
 
-        {% csrf_token %}
         <div>
             <label for="{{ form.usuario.id_for_label }}">Usuario</label>
             {{ form.usuario }}
@@ -239,13 +159,15 @@ ul li:last-child {
             {{ form.fecha_devolucion }}
         </div>
 
+        <!-- Botones Volver + Guardar centrados -->
         <div class="actions">
-            <button type="submit" class="btn-uniform">Guardar Préstamo</button>
             <a href="{% url 'principal' %}" class="btn-uniform btn-link">Volver</a>
+            <button type="submit" class="btn-uniform">Guardar</button>
         </div>
 
+        <!-- Botones Admin centrados -->
         {% if request.user.is_superuser %}
-        <div class="actions">
+        <div class="admin-actions">
             <a href="{% url 'listaprestamos' %}" class="btn-admin">Lista de préstamos</a>
             <a href="{% url 'limpiar_prestamos' %}" class="btn-admin"
                onclick="return confirm('¿Seguro que quieres limpiar todos los préstamos?');">

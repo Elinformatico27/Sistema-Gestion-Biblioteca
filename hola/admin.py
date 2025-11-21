@@ -1,6 +1,15 @@
 from django.contrib import admin
-from .models import Libro, Etiqueta, Categoria, Autor, Editorial, Usuario, Prestamo, Reserva
 from hola.models import Multa, Notificacion
+from .models import (
+    Libro,
+    Etiqueta,
+    Categoria,
+    Autor,
+    Editorial,
+    Usuario,
+    Prestamo,
+    Reserva,
+)
 
 # ===========================
 # Autor Admin

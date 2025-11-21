@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Galería de Escritores</title>
+
 <style>
   body { 
     font-family: 'Poppins', sans-serif;
@@ -130,65 +131,24 @@
 <div class="main-content">
   <div class="grid">
 
-    <div class="autor-box">
-      <img src="{% static 'hola/js/gabrielgarciamarquez.jpg' %}" alt="Gabriel García Márquez">
-      <div>📖 Gabriel García Márquez</div>
-    </div>
+    {% for escritor in escritores %}
+      <div class="autor-box">
 
-    <div class="autor-box">
-      <img src="{% static 'hola/js/IsabelAllende.png' %}" alt="Isabel Allende">
-      <div>📖 Isabel Allende</div>
-    </div>
+        <img src="{% static escritor.imagen %}" alt="{{ escritor.nombre }}">
 
-    <div class="autor-box">
-      <img src="{% static 'hola/js/MiguelCervante.png' %}" alt="Miguel de Cervantes">
-      <div>📖 Miguel de Cervantes</div>
-    </div>
+        <div>📖 {{ escritor.nombre }}</div>
 
-    <div class="autor-box">
-      <img src="{% static 'hola/js/MariaElenWalsh.png' %}" alt="María Elena Walsh">
-      <div>📖 María Elena Walsh</div>
-    </div>
+        <a href="{% url 'detalle_escritor' slug=escritor.slug %}" style="
+          display:block;
+          margin-top:10px;
+          color:#ffeaa7;
+          font-size:0.9rem;
+          text-decoration:underline;">
+          Ver detalles →
+        </a>
 
-    <div class="autor-box">
-      <img src="{% static 'hola/js/JuanBosh.png' %}" alt="Juan Bosch">
-      <div>📖 Juan Bosch</div>
-    </div>
-
-    <div class="autor-box">    
-      <img src="{% static 'hola/js/MarioVargaLLosa.png' %}" alt="Mario Vargas Llosa">
-      <div>📖 Mario Vargas Llosa</div>
-    </div>
-
-    <div class="autor-box"> 
-      <img src="{% static 'hola/js/PedroMir.png' %}" alt="Pedro Mir">
-      <div>📖 Pedro Mir</div>
-    </div>
-
-    <div class="autor-box">
-      <img src="{% static 'hola/js/OctavioPaz.png' %}" alt="Octavio Paz">
-      <div>📖 Octavio Paz</div>
-    </div>
-
-    <div class="autor-box">
-      <img src="{% static 'hola/js/PabloNeruda.png' %}" alt="Pablo Neruda">
-      <div>📖 Pablo Neruda</div>
-    </div>
-
-    <div class="autor-box">
-      <img src="{% static 'hola/js/AntonioDeSaint.png' %}" alt="Antoine de Saint-Exupéry">
-      <div>📖 Antoine de Saint-Exupéry</div>
-    </div>
-
-    <div class="autor-box">
-      <img src="{% static 'hola/js/HoracioQuiroga.png' %}" alt="Horacio Quiroga">
-      <div>📖 Horacio Quiroga</div>
-    </div>
-
-    <div class="autor-box">
-      <img src="{% static 'hola/js/AdolfoBIOYCas.png' %}" alt="Adolfo Bioy Casares">
-      <div>📖 Adolfo Bioy Casares</div>
-    </div>
+      </div>
+    {% endfor %}
 
   </div>
 

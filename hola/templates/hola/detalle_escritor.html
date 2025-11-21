@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>{{ escritor.nombre }}</title>
+<style>
+  body { font-family: 'Poppins', sans-serif; background:#1a2a6c; color:#fff; text-align:center; }
+  img { width:200px; height:250px; object-fit:cover; border-radius:12px; margin:20px 0; }
+  a { color:#ffdf85; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<h1>{{ escritor.nombre }}</h1>
+<img src="{% static escritor.imagen %}" alt="{{ escritor.nombre }}">
+
+<h2>5 mejores libros:</h2>
+<ul>
+  {% for libro in escritor.libros %}
+    <li><a href="https://www.google.com/search?q={{ libro|urlencode }}" target="_blank">{{ libro }}</a></li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'escritores' %}">← Volver a la galería</a>
+
+</body>
+</html>

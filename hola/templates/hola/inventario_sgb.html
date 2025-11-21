@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Inventario de Libros</title>
-
     <style>
         body {
             font-family:'Poppins', sans-serif;
@@ -18,175 +17,83 @@
             flex-direction:column;
             align-items:center;
         }
-
         @keyframes fondoGradiente {
             0% { background-position:0% 50%; }
             50% { background-position:100% 50%; }
             100% { background-position:0% 50%; }
         }
-
-        h1 {
-            text-align:center;
-            font-size:2.8rem;
-            margin-top:40px;
-            margin-bottom:20px;
-            text-shadow:0 0 10px #00d9ff;
-        }
-
-        .contenedor {
-            max-width:950px;
-            width:90%;
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(13px);
-            border-radius:20px;
-            padding:30px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.6);
-        }
-
-        table {
-            width:100%;
-            border-collapse:collapse;
-            margin-top:20px;
-            background:rgba(0,0,0,0.25);
-            border-radius:10px;
-            overflow:hidden;
-            text-align:center;
-        }
-
-        th {
-            background:#00d9ff;
-            color:#000;
-            font-weight:bold;
-            font-size:1.1rem;
-            padding:14px;
-            text-shadow:0 0 4px #fff;
-        }
-
-        td {
-            padding:12px;
-            background:rgba(255,255,255,0.1);
-        }
-
-        tr:nth-child(even) td {
-            background:rgba(255,255,255,0.07);
-        }
-
-        .estado {
-            padding:6px 14px;
-            border-radius:25px;
-            font-weight:bold;
-            font-size:0.9rem;
-            color:#fff;
-        }
-
+        h1 { text-align:center; font-size:2.8rem; margin-top:40px; margin-bottom:20px; text-shadow:0 0 10px #00d9ff; }
+        .contenedor { max-width:950px; width:90%; background: rgba(255,255,255,0.12); backdrop-filter: blur(13px); border-radius:20px; padding:30px; box-shadow:0 10px 25px rgba(0,0,0,0.6); }
+        table { width:100%; border-collapse:collapse; margin-top:20px; background:rgba(0,0,0,0.25); border-radius:10px; overflow:hidden; text-align:center; }
+        th { background:#00d9ff; color:#000; font-weight:bold; font-size:1.1rem; padding:14px; text-shadow:0 0 4px #fff; }
+        td { padding:12px; background:rgba(255,255,255,0.1); }
+        tr:nth-child(even) td { background:rgba(255,255,255,0.07); }
+        .estado { padding:6px 14px; border-radius:25px; font-weight:bold; font-size:0.9rem; color:#fff; }
         .Disponible { background:#27ae60; }
         .Agotado { background:#e67e22; }
-
-        .btn-devolver {
-            display:inline-block;
-            padding:8px 18px;
-            border-radius:25px;
-            background:#3498db;
-            color:#fff;
-            font-weight:600;
-            text-decoration:none;
-            box-shadow:0 4px 10px rgba(0,0,0,0.5);
-            transition:0.3s;
-        }
-
-        .btn-devolver:hover {
-            transform:translateY(-3px);
-            background:#2980b9;
-        }
-
-        .btn-volver {
-            display:inline-block;
-            margin-top:25px;
-            padding:12px 25px;
-            background:linear-gradient(135deg,#ff416c,#ff4b2b);
-            color:#fff;
-            border-radius:30px;
-            font-weight:700;
-            text-decoration:none;
-            transition:0.3s;
-            box-shadow:0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .btn-volver:hover {
-            transform:translateY(-4px);
-            box-shadow:0 8px 25px rgba(0,0,0,0.6);
-        }
-
-        footer {
-            margin-top:auto;
-            padding:20px;
-            width:100%;
-            background:rgba(255,255,255,0.1);
-            backdrop-filter:blur(10px);
-            text-align:center;
-            font-size:0.9rem;
-            color:#d4e8ff;
-            border-top-left-radius:15px;
-            border-top-right-radius:15px;
-            box-shadow:0 -4px 20px rgba(0,0,0,0.5);
-        }
+        .Prestado { background:#e74c3c; }
+        .Reservado { background:#f1c40f; color:#000; }
+        .btn-devolver { display:inline-block; padding:8px 18px; border-radius:25px; background:#3498db; color:#fff; font-weight:600; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.5); transition:0.3s; }
+        .btn-devolver:hover { transform:translateY(-3px); background:#2980b9; }
+        .btn-devuelto { display:inline-block; padding:8px 18px; border-radius:25px; background:silver; color:#000; font-weight:600; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+        .btn-volver { display:inline-block; margin-top:25px; padding:12px 25px; background:linear-gradient(135deg,#ff416c,#ff4b2b); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; transition:0.3s; box-shadow:0 4px 15px rgba(0,0,0,0.4); }
+        .btn-volver:hover { transform:translateY(-4px); box-shadow:0 8px 25px rgba(0,0,0,0.6); }
+        footer { margin-top:auto; padding:20px; width:100%; background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); text-align:center; font-size:0.9rem; color:#d4e8ff; border-top-left-radius:15px; border-top-right-radius:15px; box-shadow:0 -4px 20px rgba(0,0,0,0.5); }
     </style>
 </head>
-
 <body>
-
-    <h1>📚 Inventario de Libros</h1>
-
-    <div class="contenedor">
-        {% if inventario %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Libro</th>
-                    <th>Total</th>
-                    <th>Disponibles</th>
-                    <th>Prestados/Reservados</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for item in inventario %}
-                <tr>
-                    <td>{{ item.libro.titulo }}</td>
-                    <td>{{ item.total }}</td>
-                    <td>
-                        {% if item.disponible > 0 %}
-                            <span class="estado Disponible">{{ item.disponible }}</span>
-                        {% else %}
-                            <span class="estado Agotado">0</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ item.prestados }}</td>
-                    <td>
-                        {% if item.total > item.prestados %}
-                        <a href="{% url 'devolver_libro' item.libro.id %}" class="btn-devolver">
-                            Devolver
-                        </a>
-                        {% else %}
-                        —
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-        </table>
-        {% else %}
-            <p style="text-align:center;">No hay libros en el inventario.</p>
-        {% endif %}
-
-        <a href="{% url 'principal' %}" class="btn-volver">🏠 Volver al Inicio</a>
-    </div>
-
-    <footer>
-        &copy; 2025 Biblioteca Digital — Gestión Moderna de Libros 📘
-    </footer>
-
+<h1>📚 Inventario de Libros</h1>
+<div class="contenedor">
+    {% if inventario %}
+    <table>
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Total</th>
+                <th>Disponibles</th>
+                <th>Prestados</th>
+                <th>Reservados</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventario %}
+            <tr>
+                <td>{{ item.titulo }}</td>
+                <td>{{ item.ejemplares }}</td>
+                <td>
+                    {% if item.disponible_real > 0 %}
+                        <span class="estado Disponible">{{ item.disponible_real }}</span>
+                    {% else %}
+                        <span class="estado Agotado">0</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.prestados_real > 0 %}
+                        <span class="estado Prestado">{{ item.prestados_real }}</span>
+                    {% else %}
+                        <span class="estado Prestado">0</span>
+                    {% endif %}
+                </td>
+                <td><span class="estado Reservado">{{ item.reservados_real }}</span></td>
+                <td>
+                    {% if item.prestados_real > 0 %}
+                        <a href="{% url 'devolver_libro' item.id %}" class="btn-devolver">Devolver</a>
+                    {% else %}
+                        <span class="btn-devuelto">Devuelto</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align:center;">No hay libros en el inventario.</p>
+    {% endif %}
+    <a href="{% url 'principal' %}" class="btn-volver">🏠 Volver al Inicio</a>
+</div>
+<footer>
+    &copy; 2025 Biblioteca Digital — Gestión Moderna de Libros 📘
+</footer>
 </body>
 </html>

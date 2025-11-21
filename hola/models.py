@@ -2,8 +2,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from datetime import timedelta, date
+
 
 # ============================
 # 1. Usuario
@@ -23,6 +23,7 @@ class Usuario(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
 
+
 # ============================
 # 2. Autor
 # ============================
@@ -34,6 +35,7 @@ class Autor(models.Model):
     def __str__(self):
         return self.nombre
 
+
 # ============================
 # 3. Categoria
 # ============================
@@ -42,6 +44,7 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
+
 
 # ============================
 # 4. Editorial
@@ -53,6 +56,7 @@ class Editorial(models.Model):
     def __str__(self):
         return self.nombre
 
+
 # ============================
 # 5. Etiqueta
 # ============================
@@ -61,6 +65,7 @@ class Etiqueta(models.Model):
 
     def __str__(self):
         return self.nombre
+
 
 # ============================
 # 6. Libro
@@ -87,6 +92,7 @@ class Libro(models.Model):
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='disponible')
     etiquetas = models.ManyToManyField(Etiqueta, blank=True)
 
+
     def __str__(self):
         return f"{self.titulo} ({self.estado_real})"
 
@@ -98,6 +104,7 @@ class Libro(models.Model):
     @property
     def estado_real(self):
         return "Disponible" if self.disponible_real > 0 else "No disponible"
+
 
 # ============================
 # 7. Prestamo
@@ -111,7 +118,6 @@ class Prestamo(models.Model):
     devuelto = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        # Fecha límite 2 días después del préstamo
         if not self.pk:
             self.fecha_limite = date.today() + timedelta(days=2)
         super().save(*args, **kwargs)
@@ -119,6 +125,7 @@ class Prestamo(models.Model):
     def __str__(self):
         estado = "Devuelto" if self.devuelto else "Pendiente"
         return f"{self.usuario} → {self.libro} ({estado})"
+
 
 # ============================
 # 8. Reserva
@@ -139,6 +146,7 @@ class Reserva(models.Model):
     def __str__(self):
         return f"{self.usuario} → {self.libro} ({self.estado})"
 
+
 # ============================
 # 9. Multa
 # ============================
@@ -150,7 +158,8 @@ class Multa(models.Model):
 
     def __str__(self):
         estado = "Pagada" if self.pagada else "Pendiente"
-        return f"Multa ${self.monto} - {self.prestamo.libro.titulo} ({estado})"
+        return f"Multa RD${self.monto} - ({estado})"
+
 
 # ============================
 # 10. Notificacion
@@ -165,16 +174,13 @@ class Notificacion(models.Model):
     def __str__(self):
         return f"Notif. para {self.usuario} - {self.mensaje[:30]}..."
 
+
 # ============================
 # 11. Perfil
 # ============================
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(
-        upload_to='avatars/', 
-        default='avatars/IsabeAllende.png',
-        blank=True
-    )
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
 
     def __str__(self):
         return self.user.username

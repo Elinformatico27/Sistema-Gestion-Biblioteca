@@ -1,0 +1,155 @@
+{% extends 'hola/base.html' %}
+
+{% block title %}Multas y Notificaciones{% endblock %}
+
+{% block content %}
+<style>
+  .multas-container {
+      margin: 50px auto;
+      max-width: 1100px;
+  }
+
+  /* 🔹 Título más llamativo */
+  .multas-container h2 {
+      color: #ffc107;
+      font-size: 2.8rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 3px 3px 12px rgba(0,0,0,0.8);
+      border-bottom: 3px solid #ffc107;
+      display: inline-block;
+      padding-bottom: 10px;
+  }
+
+  /* 🔹 Tabla profesional con efecto más “duro” */
+  table.table-multas {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      background: rgba(0,50,100,0.95);
+      color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+  }
+
+  table.table-multas th, table.table-multas td {
+      padding: 18px 25px;
+      text-align: center;
+      vertical-align: middle;
+  }
+
+  table.table-multas th {
+      background: rgba(0,70,150,0.95);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+  }
+
+  table.table-multas tbody tr {
+      background: rgba(0,50,120,0.85);
+      transition: transform 0.3s, filter 0.3s;
+      border-radius: 10px;
+  }
+
+  table.table-multas tbody tr:hover {
+      transform: translateY(-4px) scale(1.02);
+      filter: brightness(1.15);
+  }
+
+  /* 🔹 Botón enviar verde */
+  .btn-enviar {
+      background: #28a745;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+  }
+
+  .btn-enviar:hover {
+      background: #218838;
+      transform: scale(1.08);
+  }
+
+  .no-multas {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #eaeaea;
+      margin-top: 50px;
+  }
+
+  /* Mensajes de Django */
+  .messages {
+      margin-bottom: 25px;
+      text-align: center;
+  }
+  .messages .success {
+      color: #fff;
+      background: #28a745;
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+  }
+
+  .btn-principal {
+      text-align: center;
+      margin-top: 35px;
+  }
+</style>
+
+<div class="container multas-container">
+    <h2>Multas y Notificaciones</h2>
+
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <span class="success">{{ message }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if multas %}
+    <table class="table-multas">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for multa in multas %}
+            <tr>
+                <td>{{ multa.prestamo.usuario.username }}</td>
+                <td>${{ multa.monto }}</td>
+                <td>{{ multa.fecha }}</td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="usuario_id" value="{{ multa.prestamo.usuario.id }}">
+                        <button class="btn-enviar">Enviar Email</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-multas">No hay multas pendientes.</p>
+    {% endif %}
+
+    <!-- Botón para volver al panel principal -->
+    <div class="btn-principal">
+        <a href="{% url 'principal' %}" class="btn-enviar">Volver al Panel Principal</a>
+    </div>
+</div>
+{% endblock %}

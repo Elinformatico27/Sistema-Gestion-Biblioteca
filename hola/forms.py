@@ -24,27 +24,34 @@ class UsuarioForm(forms.ModelForm):
 # -----------------------------
 # Formulario de Libro
 # -----------------------------
+from django import forms
+from .models import Libro, Categoria, Editorial, Etiqueta, Autor
+
 class LibroForm(forms.ModelForm):
+    autor_nombre = forms.CharField(
+        label="Autor",
+        max_length=100,
+        required=True,
+        help_text="Escribe el nombre del autor. Si no existe, se creará automáticamente."
+    )
+
     class Meta:
         model = Libro
-        fields = '__all__'
+        fields = ['titulo', 'isbn', 'autor_nombre', 'categoria', 'editorial', 'fecha_publicacion', 'paginas', 'ejemplares', 'estado', 'etiquetas']
         widgets = {
-            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
-            'isbn': forms.TextInput(attrs={'class': 'form-control'}),
-            'autor': forms.Select(attrs={'class': 'form-control'}),
-            'categoria': forms.Select(attrs={'class': 'form-control'}),
-            'editorial': forms.Select(attrs={'class': 'form-control'}),
-            'fecha_publicacion': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'paginas': forms.NumberInput(attrs={'class': 'form-control'}),
-            'ejemplares': forms.NumberInput(attrs={'class': 'form-control'}),
-            'estado': forms.Select(attrs={'class': 'form-control'}),
+            'fecha_publicacion': forms.DateInput(attrs={'type': 'date'}),
+            'categoria': forms.Select(attrs={'class': 'form-select'}),
+            'editorial': forms.Select(attrs={'class': 'form-select'}),
+            'etiquetas': forms.SelectMultiple(attrs={'class': 'form-select'}),
         }
 
-    def clean_isbn(self):
-        isbn = self.cleaned_data.get('isbn', '').replace('-', '').strip()
-        if not isbn.isdigit() or len(isbn) != 13:
-            raise forms.ValidationError("El ISBN debe tener exactamente 13 dígitos numéricos.")
-        return isbn
+    def save(self, commit=True):
+        # Primero obtenemos o creamos el autor
+        autor_nombre = self.cleaned_data.pop('autor_nombre')
+        autor_obj, _ = Autor.objects.get_or_create(nombre=autor_nombre)
+        self.instance.autor = autor_obj
+        return super().save(commit=commit)
+
 
 # -----------------------------
 # Formulario de Préstamo
